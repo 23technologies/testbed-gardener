@@ -1,4 +1,4 @@
-.MANAGER_ADDRESS.*
+.SEED_ADDRESS.*
 .deploy.*
 .id_rsa.*
 .terraform
@@ -7,6 +7,7 @@
 Pipfile.lock
 clouds.yaml
 clouds.yml
+credentials.yaml
 errored.tfstate
 minio.env
 minio.tf

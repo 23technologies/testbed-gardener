@@ -1,0 +1,98 @@
+landscape:
+  name: gardener-okeanos-xyz
+  domain: gardener.okeanos.xyz
+
+  cluster:
+    kubeconfig: ./kubeconfig
+    networks:
+      nodes: 10.45.0.0/16
+      pods: 10.44.0.0/16
+      services: 10.43.0.0/16
+
+  iaas:
+    - name: openstack
+      type: openstack
+      mode: seed
+      region: RegionOne
+      zones:
+        - nova
+      credentials: *openstack
+#      seedSettings:
+#        shootDNS:
+#          enabled: false
+      floatingPools:
+        - name: ext01
+      loadBalancerProviders:
+        - name: haproxy
+      useOctavia: True
+      machineTypes:
+        - name: 2C-2G-20G
+          cpu: "2"
+          gpu: "0"
+          memory: 2Gi
+          usable: true
+          storage:
+            class: default
+            type: default
+            size: 20Gi
+        - name: 2C-4G-20G
+          cpu: "2"
+          gpu: "0"
+          memory: 4Gi
+          usable: true
+          storage:
+            class: default
+            type: default
+            size: 20Gi
+        - name: 2C-8G-20G
+          cpu: "2"
+          gpu: "0"
+          memory: 8Gi
+          usable: true
+          storage:
+            class: default
+            type: default
+            size: 20Gi
+        - name: 4C-16G-60G
+          cpu: "4"
+          gpu: "0"
+          memory: 16Gi
+          usable: true
+          storage:
+            class: default
+            type: default
+            size: 60Gi
+      machineImageDefinitions:
+        - name: ubuntu
+          versions:
+            - version: 20.04.20201016
+              image: Ubuntu 20.04
+              regions:
+                - name: RegionOne
+                  id: c815c712-b125-4ae9-b3b6-efa2a1ed1605
+      machineImages:
+        - name: ubuntu
+          versions:
+            - version: 20.04.20201016
+      networks:
+        workers: 10.43.0.0/16
+
+  etcd:
+    backup:
+      type: swift
+      credentials: *openstack
+
+#  dns:
+#    type: openstack-designate
+#    credentials: *openstack
+
+  identity:
+    users:
+      - email: admin@gardener.okeanos.xyz
+        username: admin
+        password: password
+
+  monitoring:
+    active: true
+    username: admin
+    password: password

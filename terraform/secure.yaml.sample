@@ -1,0 +1,5 @@
+---
+clouds:
+  gx-scs:
+    auth:
+      password: PASSWORD

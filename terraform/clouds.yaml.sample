@@ -1,0 +1,13 @@
+---
+clouds:
+  gx-scs:
+    auth:
+      auth_url: https://gx-scs.okeanos.dev:5000/v3
+      username:
+      project_name:
+      user_domain_name:
+      project_domain_name:
+    region_name: "RegionOne"
+    interface: "public"
+    identity_api_version: 3
+    image_api_version: 2
