@@ -1,0 +1,16 @@
+.MANAGER_ADDRESS.*
+.deploy.*
+.id_rsa.*
+.terraform
+.tox
+.venv
+Pipfile.lock
+clouds.yaml
+clouds.yml
+errored.tfstate
+minio.env
+minio.tf
+secure.yaml
+secure.yml
+terraform.tfstate*
+terraform.tfstate.d
