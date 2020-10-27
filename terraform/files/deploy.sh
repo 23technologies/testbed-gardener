@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION_GARDENER=2.5.0
+VERSION_GARDENER=2.6.0
 
 # https://github.com/gardener/garden-setup
 
