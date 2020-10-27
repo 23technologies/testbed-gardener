@@ -7,11 +7,11 @@ VERSION_GARDENCTL=0.23.0
 
 # prepare network
 
-ping -c 1 gardener-primary.gardener.okeanos.xyz
-ping -c 1 gardener-worker-0.gardener.okeanos.xyz
-ping -c 1 gardener-worker-1.gardener.okeanos.xyz
-ping -c 1 gardener-worker-2.gardener.okeanos.xyz
-ping -c 1 gardener-worker-3.gardener.okeanos.xyz
+ping -c 1 gardener-primary
+ping -c 1 gardener-worker-0
+ping -c 1 gardener-worker-1
+ping -c 1 gardener-worker-2
+ping -c 1 gardener-worker-3
 
 sudo apt-get install -y git
 
