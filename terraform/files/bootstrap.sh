@@ -71,3 +71,7 @@ EOF
 
 sudo curl -o /usr/local/bin/gardenctl https://github.com/gardener/gardenctl/releases/download/v$VERSION_GARDENCTL/gardenctl-linux-amd64
 sudo chmod +x /usr/local/bin/gardenctl
+
+# install the local path provisioner
+
+kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
