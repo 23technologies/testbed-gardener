@@ -17,9 +17,6 @@ landscape:
       zones:
         - nova
       credentials: *openstack
-#      seedSettings:
-#        shootDNS:
-#          enabled: false
       floatingPools:
         - name: ext01
       loadBalancerProviders:
