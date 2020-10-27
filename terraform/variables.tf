@@ -18,11 +18,6 @@ variable "image" {
   type    = string
 }
 
-variable "volume_size_storage" {
-  default = 10
-  type    = number
-}
-
 variable "flavor_primary" {
   default = "4C-16GB-40GB"
   type    = string
@@ -44,11 +39,6 @@ variable "number_of_workers" {
 }
 
 variable "availability_zone" {
-  default = "nova"
-  type    = string
-}
-
-variable "volume_availability_zone" {
   default = "nova"
   type    = string
 }
