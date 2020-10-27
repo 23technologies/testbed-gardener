@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+# versions
+
+VERSION_DASHBOARD=2.0.4
+VERSION_GARDENCTL=0.23.0
+
+# prepare network
+
 ping -c 1 gardener-primary.gardener.okeanos.xyz
 ping -c 1 gardener-worker-0.gardener.okeanos.xyz
 ping -c 1 gardener-worker-1.gardener.okeanos.xyz
@@ -33,7 +40,7 @@ pushd autoscaler/vertical-pod-autoscaler
 bash hack/vpa-up.sh
 popd
 
-VERSION_DASHBOARD=2.0.4
+# install k8s dashboard
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v${VERSION_DASHBOARD}/aio/deploy/recommended.yaml
 
@@ -59,3 +66,8 @@ subjects:
   name: admin
   namespace: kubernetes-dashboard
 EOF
+
+# install gardenctl
+
+sudo curl -o /usr/local/bin/gardenctl https://github.com/gardener/gardenctl/releases/download/v$VERSION_GARDENCTL/gardenctl-linux-amd64
+sudo chmod +x /usr/local/bin/gardenctl
