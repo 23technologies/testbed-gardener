@@ -4,6 +4,7 @@
 
 VERSION_DASHBOARD=2.0.4
 VERSION_GARDENCTL=0.23.0
+VERSION_K9S=0.22.1
 
 # prepare network
 
@@ -71,6 +72,11 @@ EOF
 
 sudo curl -L -o /usr/local/bin/gardenctl https://github.com/gardener/gardenctl/releases/download/v$VERSION_GARDENCTL/gardenctl-linux-amd64
 sudo chmod +x /usr/local/bin/gardenctl
+
+# install k9s
+
+curl -L https://github.com/derailed/k9s/releases/download/v$VERSION_K9S/k9s_Linux_x86_64.tar.gz | sudo tar xzf - -C /usr/local/bin/
+sudo chmod +x /usr/local/bin/k9s
 
 # install the local path provisioner
 
