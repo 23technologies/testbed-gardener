@@ -61,7 +61,7 @@ deploy: .SEED_ADDRESS.$(ENVIRONMENT) .id_rsa.$(ENVIRONMENT)
 
 sshuttle: .SEED_ADDRESS.$(ENVIRONMENT) .id_rsa.$(ENVIRONMENT)
 	@source ./.SEED_ADDRESS.$(ENVIRONMENT); \
-	sshuttle --ssh-cmd "ssh -o StrictHostKeyChecking=no -i .id_rsa.$(ENVIRONMENT) " -r $(USERNAME)@$$SEED_ADDRESS 10.43.0.0/16
+	sshuttle --ssh-cmd "ssh -o StrictHostKeyChecking=no -i .id_rsa.$(ENVIRONMENT) " -r $(USERNAME)@$$SEED_ADDRESS 10.40.0.0/16
 
 console: .deploy.$(ENVIRONMENT)
 	@$(OPENSTACK) console log show gardener-$(CONSOLE)

@@ -93,12 +93,12 @@ resource "openstack_networking_network_v2" "net_management" {
 resource "openstack_networking_subnet_v2" "subnet_management" {
   name       = "subnet-${var.prefix}-management"
   network_id = openstack_networking_network_v2.net_management.id
-  cidr       = "10.43.0.0/16"
+  cidr       = "10.40.0.0/16"
   ip_version = 4
 
   allocation_pool {
-    start = "10.43.255.1"
-    end   = "10.43.255.254"
+    start = "10.40.255.1"
+    end   = "10.40.255.254"
   }
 }
 

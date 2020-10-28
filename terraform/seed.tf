@@ -11,7 +11,7 @@ resource "openstack_networking_port_v2" "seed_port_management" {
   ]
 
   fixed_ip {
-    ip_address = "10.43.0.10"
+    ip_address = "10.40.0.10"
     subnet_id  = openstack_networking_subnet_v2.subnet_management.id
   }
 }

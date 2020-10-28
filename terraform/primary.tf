@@ -16,7 +16,7 @@ resource "openstack_networking_port_v2" "primary_port_management" {
   ]
 
   fixed_ip {
-    ip_address = "10.43.10.10"
+    ip_address = "10.40.10.10"
     subnet_id  = openstack_networking_subnet_v2.subnet_management.id
   }
 }
@@ -39,7 +39,7 @@ power_state:
   mode: reboot
   condition: True
 runcmd:
-  - curl https://get.k3s.io | K3S_TOKEN=${var.k3s_token} INSTALL_K3S_EXEC="server --disable traefik" sh -
+  - curl https://get.k3s.io | K3S_TOKEN=${var.k3s_token} INSTALL_K3S_EXEC="server --disable=traefik" sh -
   - cp /etc/rancher/k3s/k3s.yaml /home/${var.ssh_username}/k3s.yaml
   - "chown ${var.ssh_username}: /home/${var.ssh_username}/k3s.yaml"
 EOT

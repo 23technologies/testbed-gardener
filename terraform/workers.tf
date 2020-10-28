@@ -4,7 +4,7 @@ resource "openstack_networking_port_v2" "worker_port_management" {
   security_group_ids = [openstack_compute_secgroup_v2.security_group_management.id]
 
   fixed_ip {
-    ip_address = "10.43.20.1${count.index}"
+    ip_address = "10.40.20.1${count.index}"
     subnet_id  = openstack_networking_subnet_v2.subnet_management.id
   }
 }
