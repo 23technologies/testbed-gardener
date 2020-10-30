@@ -2,8 +2,29 @@ landscape:
   name: gardener-okeanos-xyz
   domain: gardener.okeanos.xyz
 
+  gardener:
+    extensions:
+      networking-calico:
+        valueOverwrites:
+          vethMTU: 1400
+#      provider-openstack:
+#        valueOverwrites:
+#          config:
+#            etcd:
+#             storage:
+#               className: gardener.cloud-fast
+#               capacity: 1Gi
+#               provisioner: kubernetes.io/no-provisioner
+
+  monitoring:
+    active: true
+    username: admin
+    password: password
+
   cluster:
     kubeconfig: ./kubeconfig
+    domain: gardener.okeanos.xyz
+    iaas: openstack
     networks:
       nodes: 10.45.0.0/16
       pods: 10.44.0.0/16
@@ -13,6 +34,9 @@ landscape:
     - name: openstack
       type: openstack
       mode: seed
+      seedConfig:
+        backup:
+          active: false
       region: RegionOne
       zones:
         - nova
@@ -21,7 +45,7 @@ landscape:
         - name: ext01
       loadBalancerProviders:
         - name: haproxy
-      useOctavia: True
+      useOctavia: true
       machineTypes:
         - name: 2C-2GB-20GB
           cpu: "2"
@@ -71,8 +95,6 @@ landscape:
         - name: ubuntu
           versions:
             - version: 20.4.20201016
-      networks:
-        workers: 10.43.0.0/16
 
   etcd:
     backup:
@@ -88,8 +110,3 @@ landscape:
       - email: admin@gardener.okeanos.xyz
         username: admin
         password: password
-
-  monitoring:
-    active: true
-    username: admin
-    password: password
