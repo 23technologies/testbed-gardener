@@ -76,6 +76,11 @@ EOT
     destination = "/home/${var.ssh_username}/deploy.sh"
   }
 
+provisioner "file" {
+    source      = "files/kubernetes-manifests.d/"
+    destination = "/home/${var.ssh_username}"
+  }
+
   provisioner "local-exec" {
     command = "sleep 120"
   }

@@ -50,3 +50,11 @@ sudo chmod +x /usr/local/bin/gardenctl
 
 curl -L https://github.com/derailed/k9s/releases/download/v$VERSION_K9S/k9s_Linux_x86_64.tar.gz | sudo tar xzf - -C /usr/local/bin/
 sudo chmod +x /usr/local/bin/k9s
+
+# apply openstack-cloud-controller
+kubectl apply -f ~/openstack.yaml
+
+# apply cinder-csi
+kubectl apply -f ~/cinder.yaml
+
+echo "applied cinder and openstack-controllers. Don't forget to provide the cloud-config secret. It is required by both."

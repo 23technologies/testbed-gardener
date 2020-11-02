@@ -6,6 +6,7 @@
 .venv
 Pipfile.lock
 clouds.yaml
+cloud-config-secret.yaml
 clouds.yml
 credentials.yaml
 errored.tfstate
