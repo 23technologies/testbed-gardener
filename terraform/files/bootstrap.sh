@@ -41,33 +41,6 @@ pushd autoscaler/vertical-pod-autoscaler
 bash hack/vpa-up.sh
 popd
 
-# install k8s dashboard
-
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v${VERSION_DASHBOARD}/aio/deploy/recommended.yaml
-
-cat <<EOF | kubectl apply -f -
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: admin
-  namespace: kubernetes-dashboard
-EOF
-
-cat <<EOF | kubectl apply -f -
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRoleBinding
-metadata:
-  name: admin
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: cluster-admin
-subjects:
-- kind: ServiceAccount
-  name: admin
-  namespace: kubernetes-dashboard
-EOF
-
 # install gardenctl
 
 sudo curl -L -o /usr/local/bin/gardenctl https://github.com/gardener/gardenctl/releases/download/v$VERSION_GARDENCTL/gardenctl-linux-amd64
@@ -77,7 +50,3 @@ sudo chmod +x /usr/local/bin/gardenctl
 
 curl -L https://github.com/derailed/k9s/releases/download/v$VERSION_K9S/k9s_Linux_x86_64.tar.gz | sudo tar xzf - -C /usr/local/bin/
 sudo chmod +x /usr/local/bin/k9s
-
-# install the local path provisioner
-
-kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/master/deploy/local-path-storage.yaml
