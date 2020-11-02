@@ -1,0 +1,15 @@
+[Global]
+auth-url=https://gx-scs.okeanos.dev:5000/v3
+region=RegionOne
+tenant-id=c273b047550f436e8c52006edf7afda4
+domain-name=scs-gardener
+username=admin@scs-gardener
+password=
+
+[LoadBalancer]
+use-octavia=true
+subnet-id=a3a52980-5ca0-4821-9201-a99eaf5d3b3b
+floating-network-id=a882b33a-f52e-4e0e-872d-140606e16930
+
+[BlockStorage]
+bs-version=v2

@@ -7,6 +7,7 @@
 Pipfile.lock
 clouds.yaml
 cloud-config-secret.yaml
+cloud.conf
 clouds.yml
 credentials.yaml
 errored.tfstate
