@@ -76,7 +76,7 @@ EOT
     destination = "/home/${var.ssh_username}/deploy.sh"
   }
 
-provisioner "file" {
+  provisioner "file" {
     source      = "files/kubernetes-manifests.d/"
     destination = "/home/${var.ssh_username}"
   }
