@@ -7,14 +7,6 @@ landscape:
       networking-calico:
         valueOverwrites:
           vethMTU: 1400
-#      provider-openstack:
-#        valueOverwrites:
-#          config:
-#            etcd:
-#             storage:
-#               className: gardener.cloud-fast
-#               capacity: 1Gi
-#               provisioner: kubernetes.io/no-provisioner
 
   monitoring:
     active: true
@@ -98,12 +90,7 @@ landscape:
 
   etcd:
     backup:
-      type: swift
-      credentials: *openstack
-
-#  dns:
-#    type: openstack-designate
-#    credentials: *openstack
+      active: false
 
   identity:
     users:
