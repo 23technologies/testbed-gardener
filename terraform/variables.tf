@@ -4,7 +4,7 @@ variable "cloud_provider" {
 }
 
 variable "prefix" {
-  default = "gardener"
+  default = "garden-cluster"
   type    = string
 }
 
@@ -18,7 +18,7 @@ variable "image" {
   type    = string
 }
 
-variable "flavor_primary" {
+variable "flavor_master" {
   default = "4C-8GB-40GB"
   type    = string
 }

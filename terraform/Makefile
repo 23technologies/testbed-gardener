@@ -5,7 +5,7 @@ ENVIRONMENT = gx-scs
 OPENSTACK = openstack
 USERNAME = ubuntu
 
-RESOURCE = openstack_networking_floatingip_v2.primary_floating_ip
+RESOURCE = openstack_networking_floatingip_v2.master_floating_ip
 STATE = errored.tfstate
 
 NEED_OSCLOUD := $(shell test -z "$$OS_PASSWORD" -a -z "$$OS_CLOUD" && echo 1 || echo 0)

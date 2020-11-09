@@ -28,7 +28,7 @@ resource "openstack_compute_instance_v2" "seed_server" {
   flavor_name       = var.flavor_seed
   key_pair          = openstack_compute_keypair_v2.key.name
 
-  depends_on = [openstack_compute_instance_v2.primary_server]
+  depends_on = [openstack_compute_instance_v2.master_server]
 
   network { port = openstack_networking_port_v2.seed_port_management.id }
 

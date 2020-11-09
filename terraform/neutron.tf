@@ -2,9 +2,9 @@
 # Security groups #
 ###################
 
-resource "openstack_compute_secgroup_v2" "security_group_primary" {
-  name        = "${var.prefix}-primary"
-  description = "primary security group"
+resource "openstack_compute_secgroup_v2" "security_group_master" {
+  name        = "${var.prefix}-master"
+  description = "master security group"
 
   rule {
     cidr        = "0.0.0.0/0"
