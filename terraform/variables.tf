@@ -28,7 +28,7 @@ variable "flavor_worker" {
   type    = string
 }
 
-variable "flavor_seed" {
+variable "flavor_mgmt" {
   default = "2C-2GB-20GB"
   type    = string
 }

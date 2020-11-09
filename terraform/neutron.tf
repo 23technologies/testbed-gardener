@@ -35,9 +35,9 @@ resource "openstack_compute_secgroup_v2" "security_group_master" {
   }
 }
 
-resource "openstack_compute_secgroup_v2" "security_group_seed" {
-  name        = "${var.prefix}-seed"
-  description = "seed security group"
+resource "openstack_compute_secgroup_v2" "security_group_mgmt" {
+  name        = "${var.prefix}-mgmt"
+  description = "mgmt security group"
 
   rule {
     cidr        = "0.0.0.0/0"

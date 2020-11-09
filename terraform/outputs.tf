@@ -1,5 +1,5 @@
-output "seed_address" {
-  value     = openstack_networking_floatingip_v2.seed_floating_ip.address
+output "mgmt_address" {
+  value     = openstack_networking_floatingip_v2.mgmt_floating_ip.address
   sensitive = true
 }
 
@@ -17,5 +17,5 @@ resource "local_file" "id_rsa" {
 resource "local_file" "SEED_ADDRESS" {
   filename        = ".SEED_ADDRESS.${var.cloud_provider}"
   file_permission = "0644"
-  content         = "SEED_ADDRESS=${openstack_networking_floatingip_v2.seed_floating_ip.address}\n"
+  content         = "SEED_ADDRESS=${openstack_networking_floatingip_v2.mgmt_floating_ip.address}\n"
 }
