@@ -19,12 +19,12 @@ variable "image" {
 }
 
 variable "flavor_master" {
-  default = "4C-8GB-40GB"
+  default = "4C-8GB-60GB"
   type    = string
 }
 
 variable "flavor_worker" {
-  default = "4C-8GB-40GB"
+  default = "4C-8GB-60GB"
   type    = string
 }
 
