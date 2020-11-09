@@ -1,4 +1,4 @@
-.SEED_ADDRESS.*
+.MGMT_ADDRESS.*
 .deploy.*
 .id_rsa.*
 .terraform

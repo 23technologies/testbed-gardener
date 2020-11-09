@@ -14,8 +14,8 @@ resource "local_file" "id_rsa" {
   sensitive_content = openstack_compute_keypair_v2.key.private_key
 }
 
-resource "local_file" "SEED_ADDRESS" {
-  filename        = ".SEED_ADDRESS.${var.cloud_provider}"
+resource "local_file" "MGMT_ADDRESS" {
+  filename        = ".MGMT_ADDRESS.${var.cloud_provider}"
   file_permission = "0644"
-  content         = "SEED_ADDRESS=${openstack_networking_floatingip_v2.mgmt_floating_ip.address}\n"
+  content         = "MGMT_ADDRESS=${openstack_networking_floatingip_v2.mgmt_floating_ip.address}\n"
 }

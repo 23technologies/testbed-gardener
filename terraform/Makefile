@@ -64,7 +64,7 @@ sshuttle: .MGMT_ADDRESS.$(ENVIRONMENT) .id_rsa.$(ENVIRONMENT)
 	sshuttle --ssh-cmd "ssh -o StrictHostKeyChecking=no -i .id_rsa.$(ENVIRONMENT) " -r $(USERNAME)@$$MGMT_ADDRESS 10.40.0.0/16
 
 console: .deploy.$(ENVIRONMENT)
-	@$(OPENSTACK) console log show gardener-$(CONSOLE)
+	@$(OPENSTACK) console log show garden-cluster-$(CONSOLE)
 
 .deploy.$(ENVIRONMENT): init
 	@STAT=$$(terraform state list); \
