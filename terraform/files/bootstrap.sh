@@ -41,6 +41,10 @@ pushd autoscaler/vertical-pod-autoscaler
 bash hack/vpa-up.sh
 popd
 
+# enable kubectl completion
+kubectl completion bash >> ~/.bashrc
+echo "alias k=kubectl" >> ~/.bashrc
+
 # install gardenctl
 
 sudo curl -L -o /usr/local/bin/gardenctl https://github.com/garden-cluster/gardenctl/releases/download/v$VERSION_GARDENCTL/gardenctl-linux-amd64
@@ -50,6 +54,12 @@ sudo chmod +x /usr/local/bin/gardenctl
 
 curl -L https://github.com/derailed/k9s/releases/download/v$VERSION_K9S/k9s_Linux_x86_64.tar.gz | sudo tar xzf - -C /usr/local/bin/
 sudo chmod +x /usr/local/bin/k9s
+
+# install sow
+# https://github.com/gardener/garden-setup
+
+git clone https://github.com/gardener/sow
+echo "export PATH=$PATH:$HOME/sow/docker/bin" >> ~/.bashrc
 
 # apply openstack-cloud-controller
 kubectl apply -f ~/openstack.yaml
