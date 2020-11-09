@@ -4,6 +4,11 @@ landscape:
 
   gardener:
     extensions:
+      etcd:
+         storage:
+           className: cinder-default
+           capacity: 25Gi
+           provisioner: cinder.csi.openstack.org
       networking-calico:
         valueOverwrites:
           vethMTU: 1400
@@ -36,7 +41,7 @@ landscape:
       floatingPools:
         - name: ext01
       loadBalancerProviders:
-        - name: haproxy
+        - name: amphora
       useOctavia: true
       machineTypes:
         - name: 2C-2GB-20GB
