@@ -5,8 +5,7 @@ VERSION_GARDENER=3.0.0
 mkdir landscape
 git clone https://github.com/gardener/garden-setup --branch ${VERSION_GARDENER} landscape/crop
 cp $HOME/.kube/config landscape/kubeconfig
-cat $HOME/credentials.yaml > landscape/acre.yaml
-cat $HOME/acre.yaml >> landscape/acre.yaml
+cp $HOME/acre.yaml landscape/
 
 pushd landscape
 sow order -A

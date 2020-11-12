@@ -57,13 +57,8 @@ EOT
   }
 
   provisioner "file" {
-    source      = "files/${var.cloud_provider}/acre.yaml"
+    content      = templatefile("files/${var.cloud_provider}/acre.yaml.tmpl", {clouds = yamldecode(file("clouds.yaml")), secure = yamldecode(file("secure.yaml"))})
     destination = "/home/${var.ssh_username}/acre.yaml"
-  }
-
-  provisioner "file" {
-    source      = "files/${var.cloud_provider}/credentials.yaml"
-    destination = "/home/${var.ssh_username}/credentials.yaml"
   }
 
   provisioner "file" {

@@ -1,14 +1,27 @@
+---
+credentials: &openstack
+  username: ${clouds.clouds.gx-scs.auth.username}
+  password: ${secure.clouds.gx-scs.auth.password}
+  tenantName: ${clouds.clouds.gx-scs.auth.project_name}
+  domainName: ${clouds.clouds.gx-scs.auth.project_domain_name}
+  userDomainName: ${clouds.clouds.gx-scs.auth.user_domain_name}
+  authURL: ${clouds.clouds.gx-scs.auth.auth_url}
+  OS_AUTH_URL: ${clouds.clouds.gx-scs.auth.auth_url}
+  region:  ${clouds.clouds.gx-scs.region_name}
+
 landscape:
   name: gardener-okeanos-xyz
   domain: gardener.okeanos.xyz
 
   gardener:
     extensions:
-      etcd:
-        storage:
-          className: cinder-default
-          capacity: 25Gi
-          provisioner: cinder.csi.openstack.org
+      provider-openstack:
+        config:
+          etcd:
+            storage:
+              className: cinder-default
+              capacity: 25Gi
+              provisioner: cinder.csi.openstack.org
       networking-calico:
         valueOverwrites:
           vethMTU: 1400
