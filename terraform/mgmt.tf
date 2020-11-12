@@ -62,6 +62,11 @@ EOT
   }
 
   provisioner "file" {
+    content     = templatefile("files/${var.cloud_provider}/cloud.conf.tmpl", { clouds = yamldecode(file("clouds.yaml")), secure = yamldecode(file("secure.yaml")), subnet = openstack_networking_subnet_v2.subnet_management })
+    destination = "/home/${var.ssh_username}/cloud.conf"
+  }
+
+  provisioner "file" {
     source      = "files/bootstrap.sh"
     destination = "/home/${var.ssh_username}/bootstrap.sh"
   }

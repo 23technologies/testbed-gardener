@@ -67,4 +67,5 @@ kubectl apply -f ~/openstack.yaml
 # apply cinder-csi
 kubectl apply -f ~/cinder.yaml
 
-echo "applied cinder and openstack-controllers. Don't forget to provide the cloud-config secret. It is required by both."
+# create cloud.conf secret
+kubectl create secret generic cloud-config --from-file=$HOME/cloud.conf -n kube-system
