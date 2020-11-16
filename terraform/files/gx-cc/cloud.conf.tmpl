@@ -1,0 +1,15 @@
+[Global]
+auth-url=${clouds.clouds.gx-cc.auth.auth_url}
+region=${clouds.clouds.gx-cc.region_name}
+tenant-name=${clouds.clouds.gx-cc.auth.project_name}
+domain-name=${clouds.clouds.gx-cc.auth.project_domain_name}
+username=${clouds.clouds.gx-cc.auth.username}
+password=${secure.clouds.gx-cc.auth.password}
+
+[LoadBalancer]
+use-octavia=true
+subnet-id=${subnet.id}
+floating-network-id=2aec7a99-3783-4e2a-bd2b-bbe4fef97d1c
+
+[BlockStorage]
+bs-version=v2
