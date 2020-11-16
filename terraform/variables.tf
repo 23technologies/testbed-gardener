@@ -18,7 +18,7 @@ variable "image" {
   type    = string
 }
 
-variable "flavor_master" {
+variable "flavor_main" {
   default = "4C-8GB-60GB"
   type    = string
 }

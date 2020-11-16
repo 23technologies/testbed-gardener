@@ -1,7 +1,7 @@
 availability_zone         = "nova"
 cloud_provider            = "gx-scs"
 dns_domain                = "gardener.okeanos.xyz."
-flavor_master             = "4C-8GB-60GB"
+flavor_main             = "4C-8GB-60GB"
 flavor_mgmt               = "2C-2GB-20GB"
 flavor_worker             = "4C-8GB-60GB"
 image                     = "Ubuntu 20.04"

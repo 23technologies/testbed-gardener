@@ -1,18 +1,18 @@
-resource "openstack_networking_floatingip_v2" "master_floating_ip" {
+resource "openstack_networking_floatingip_v2" "main_floating_ip" {
   pool       = var.public
   depends_on = [openstack_networking_router_interface_v2.router_interface]
 }
 
-resource "openstack_networking_floatingip_associate_v2" "master_floating_ip_association" {
-  floating_ip = openstack_networking_floatingip_v2.master_floating_ip.address
-  port_id     = openstack_networking_port_v2.master_port_management.id
+resource "openstack_networking_floatingip_associate_v2" "main_floating_ip_association" {
+  floating_ip = openstack_networking_floatingip_v2.main_floating_ip.address
+  port_id     = openstack_networking_port_v2.main_port_management.id
 }
 
-resource "openstack_networking_port_v2" "master_port_management" {
+resource "openstack_networking_port_v2" "main_port_management" {
   network_id = openstack_networking_network_v2.net_management.id
   security_group_ids = [
     openstack_compute_secgroup_v2.security_group_management.id,
-    openstack_compute_secgroup_v2.security_group_master.id
+    openstack_compute_secgroup_v2.security_group_main.id
   ]
 
   fixed_ip {
@@ -21,14 +21,14 @@ resource "openstack_networking_port_v2" "master_port_management" {
   }
 }
 
-resource "openstack_compute_instance_v2" "master_server" {
-  name              = "${var.prefix}-master"
+resource "openstack_compute_instance_v2" "main_server" {
+  name              = "${var.prefix}-main"
   availability_zone = var.availability_zone
   image_name        = var.image
-  flavor_name       = var.flavor_master
+  flavor_name       = var.flavor_main
   key_pair          = openstack_compute_keypair_v2.key.name
 
-  network { port = openstack_networking_port_v2.master_port_management.id }
+  network { port = openstack_networking_port_v2.main_port_management.id }
 
   user_data = <<-EOT
 #cloud-config

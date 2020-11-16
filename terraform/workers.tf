@@ -17,7 +17,7 @@ resource "openstack_compute_instance_v2" "worker" {
   flavor_name       = var.flavor_worker
   key_pair          = openstack_compute_keypair_v2.key.name
 
-  depends_on = [openstack_compute_instance_v2.master_server]
+  depends_on = [openstack_compute_instance_v2.main_server]
 
   network { port = openstack_networking_port_v2.worker_port_management[count.index].id }
 
@@ -30,6 +30,6 @@ power_state:
   mode: reboot
   condition: True
 runcmd:
-  - curl https://get.k3s.io | K3S_TOKEN=${var.k3s_token} K3S_URL=https://garden-cluster-master:6443 INSTALL_K3S_EXEC="agent" sh -
+  - curl https://get.k3s.io | K3S_TOKEN=${var.k3s_token} K3S_URL=https://garden-cluster-main:6443 INSTALL_K3S_EXEC="agent" sh -
 EOT
 }

@@ -8,7 +8,7 @@ VERSION_K9S=0.22.1
 
 # prepare network
 
-ping -c 1 garden-cluster-master
+ping -c 1 garden-cluster-main
 ping -c 1 garden-cluster-worker-0
 ping -c 1 garden-cluster-worker-1
 ping -c 1 garden-cluster-worker-2
@@ -31,8 +31,8 @@ sudo snap restart docker
 chmod 0600 $HOME/.ssh/id_rsa
 mkdir -p $HOME/.kube
 chmod 0750 $HOME/.kube
-scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null garden-cluster-master:$HOME/k3s.yaml $HOME/.kube/config
-sed -i 's/127.0.0.1/garden-cluster-master/g' $HOME/.kube/config
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null garden-cluster-main:$HOME/k3s.yaml $HOME/.kube/config
+sed -i 's/127.0.0.1/garden-cluster-main/g' $HOME/.kube/config
 
 # https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
 
