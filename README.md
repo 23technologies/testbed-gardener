@@ -10,11 +10,7 @@ A documentation with the individual steps can be found in the repository
 
 ## Limitations
 
-* The DNS integration is currently missing. Therefore the existing floating IP address
-  ``213.131.230.153`` must currently be used for the primary node. ``*.gardener.okeanos.xyz``
-  resolve to this address.
-* Because of the missing DNS integration and the missing S3 Terraform backend integration
-  only a single testbed can be used in a project.
+* Because of the missing S3 Terraform backend integration only a single testbed can be used in a project.
 
 ## Preparations
 
@@ -27,8 +23,11 @@ A documentation with the individual steps can be found in the repository
 
 **Before use, make sure that no other testbed is already in the project.**
 
-* ``make attach PARAMS=da1a42e3-8705-4d24-94f7-3f5001ad0521``
+### Build up Gardener
 * ``make create``
 * ``make deploy`` (or: ``make login`` followed by ``bash deploy.sh``)
-* ``make detach``
+
+### Teardown Gardener
+* Delete all Clusters inside gardener (via the dashboard or the API)
+* ``make login`` and ``sow burndown -A`` in folder ``landscape``
 * ``make clean``
