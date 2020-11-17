@@ -16,12 +16,13 @@ landscape:
   gardener:
     extensions:
       provider-openstack:
-        config:
-          etcd:
-            storage:
-              className: cinder-default
-              capacity: 25Gi
-              provisioner: cinder.csi.openstack.org
+        valueOverwrites:
+          config:
+            etcd:
+              storage:
+                className: cinder-default
+                capacity: 25Gi
+                provisioner: cinder.csi.openstack.org
       networking-calico:
         valueOverwrites:
           vethMTU: 1400
