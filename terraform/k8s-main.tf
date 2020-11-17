@@ -39,7 +39,7 @@ power_state:
   mode: reboot
   condition: True
 runcmd:
-  - curl https://get.k3s.io | K3S_TOKEN=${var.k3s_token} INSTALL_K3S_EXEC="server --disable-cloud-controller --kubelet-arg=cloud-provider=external --disable=traefik,servicelb,local-storage" sh -
+  - curl https://get.k3s.io | K3S_TOKEN=${random_password.k3s_token.result} INSTALL_K3S_EXEC="server --disable-cloud-controller --kubelet-arg=cloud-provider=external --disable=traefik,servicelb,local-storage" sh -
   - cp /etc/rancher/k3s/k3s.yaml /home/${var.ssh_username}/k3s.yaml
   - "chown ${var.ssh_username}: /home/${var.ssh_username}/k3s.yaml"
 EOT

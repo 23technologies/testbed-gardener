@@ -63,11 +63,6 @@ variable "port_security_enabled" {
   type    = bool
 }
 
-variable "k3s_token" {
-  default = "11111111-1111-1111-1111-111111111111"
-  type    = string
-}
-
 variable "ssh_username" {
   default = "ubuntu"
   type    = string

@@ -8,6 +8,11 @@ output "private_key" {
   sensitive = true
 }
 
+output "gardener_password" {
+  value     = random_password.gardener_password.result
+  sensitive = false
+}
+
 resource "local_file" "id_rsa" {
   filename          = ".id_rsa.${var.cloud_provider}"
   file_permission   = "0600"

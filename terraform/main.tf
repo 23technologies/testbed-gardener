@@ -11,6 +11,10 @@ terraform {
       version = "1.32.0"
     }
 
+    random = {
+      source = "hashicorp/random"
+    }
+
     local = {
       source = "hashicorp/local"
     }
