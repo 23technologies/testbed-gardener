@@ -62,7 +62,7 @@ EOT
   }
 
   provisioner "file" {
-    content     = templatefile("files/cloud.conf.tmpl", { clouds = yamldecode(file("clouds.yaml")), secure = yamldecode(file("secure.yaml")), subnet = openstack_networking_subnet_v2.subnet_management, public = data.openstack_networking_network_v2.public })
+    content     = templatefile("files/${var.cloud_provider}/cloud.conf.tmpl", { clouds = yamldecode(file("clouds.yaml")), secure = yamldecode(file("secure.yaml")), subnet = openstack_networking_subnet_v2.subnet_management, public = data.openstack_networking_network_v2.public })
     destination = "/home/${var.ssh_username}/cloud.conf"
   }
 
