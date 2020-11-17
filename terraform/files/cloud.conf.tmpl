@@ -1,0 +1,15 @@
+[Global]
+auth-url=${clouds.auth.auth_url}
+region=${clouds.region_name}
+tenant-name=${clouds.auth.project_name}
+domain-name=${clouds.auth.project_domain_name}
+username=${clouds.auth.username}
+password=${secure.auth.password}
+
+[LoadBalancer]
+use-octavia=true
+subnet-id=${subnet.id}
+floating-network-id=${public.id}
+
+[BlockStorage]
+bs-version=v2

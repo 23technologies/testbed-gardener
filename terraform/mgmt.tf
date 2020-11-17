@@ -21,6 +21,12 @@ resource "openstack_networking_floatingip_associate_v2" "mgmt_floating_ip_associ
   port_id     = openstack_networking_port_v2.mgmt_port_management.id
 }
 
+locals {
+  clouds = lookup(lookup(yamldecode(file("clouds.yaml")), "clouds"), var.cloud_provider)
+  secure = lookup(lookup(yamldecode(file("secure.yaml")), "clouds"), var.cloud_provider)
+}
+
+
 resource "openstack_compute_instance_v2" "mgmt_server" {
   name              = "${var.prefix}-mgmt"
   availability_zone = var.availability_zone
@@ -57,12 +63,12 @@ EOT
   }
 
   provisioner "file" {
-    content     = templatefile("files/${var.cloud_provider}/acre.yaml.tmpl", { clouds = yamldecode(file("clouds.yaml")), secure = yamldecode(file("secure.yaml")), public = var.public, dns_domain = var.dns_domain, flavor_worker = var.flavor_worker })
+    content     = templatefile("files/${var.cloud_provider}/acre.yaml.tmpl", { clouds = local.clouds, secure = local.secure, public = var.public, dns_domain = var.dns_domain, flavor_worker = var.flavor_worker })
     destination = "/home/${var.ssh_username}/acre.yaml"
   }
 
   provisioner "file" {
-    content     = templatefile("files/${var.cloud_provider}/cloud.conf.tmpl", { clouds = yamldecode(file("clouds.yaml")), secure = yamldecode(file("secure.yaml")), subnet = openstack_networking_subnet_v2.subnet_management, public = data.openstack_networking_network_v2.public })
+    content     = templatefile("files/cloud.conf.tmpl", { clouds = local.clouds, secure = local.secure, subnet = openstack_networking_subnet_v2.subnet_management, public = data.openstack_networking_network_v2.public })
     destination = "/home/${var.ssh_username}/cloud.conf"
   }
 
