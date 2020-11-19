@@ -1,7 +1,7 @@
 resource "openstack_networking_port_v2" "worker_port_management" {
   count              = var.number_of_workers
   network_id         = openstack_networking_network_v2.net_management.id
-  security_group_ids = [openstack_compute_secgroup_v2.security_group_management.id]
+  security_group_ids = [openstack_compute_secgroup_v2.security_group_default.id, openstack_compute_secgroup_v2.security_group_worker.id]
 
   fixed_ip {
     ip_address = "10.40.20.1${count.index}"

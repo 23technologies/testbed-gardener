@@ -6,7 +6,7 @@ resource "openstack_networking_floatingip_v2" "mgmt_floating_ip" {
 resource "openstack_networking_port_v2" "mgmt_port_management" {
   network_id = openstack_networking_network_v2.net_management.id
   security_group_ids = [
-    openstack_compute_secgroup_v2.security_group_management.id,
+    openstack_compute_secgroup_v2.security_group_default.id,
     openstack_compute_secgroup_v2.security_group_mgmt.id
   ]
 

@@ -1,6 +1,6 @@
 output "mgmt_address" {
   value     = openstack_networking_floatingip_v2.mgmt_floating_ip.address
-  sensitive = true
+  sensitive = false
 }
 
 output "private_key" {

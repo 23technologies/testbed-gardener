@@ -2,42 +2,45 @@
 # Security groups #
 ###################
 
-resource "openstack_compute_secgroup_v2" "security_group_main" {
-  name        = "${var.prefix}-main"
-  description = "main security group"
+resource "openstack_compute_secgroup_v2" "security_group_default" {
+  name        = "${var.prefix}-default"
+  description = "default security group"
 
   rule {
-    cidr        = "0.0.0.0/0"
-    ip_protocol = "tcp"
-    from_port   = 80
-    to_port     = 80
-  }
-
-  rule {
-    cidr        = "0.0.0.0/0"
-    ip_protocol = "tcp"
-    from_port   = 443
-    to_port     = 443
-  }
-
-  rule {
-    cidr        = "0.0.0.0/0"
-    ip_protocol = "tcp"
-    from_port   = 6443
-    to_port     = 6443
-  }
-
-  rule {
-    cidr        = "0.0.0.0/0"
+    self        = true
     ip_protocol = "icmp"
     from_port   = -1
     to_port     = -1
+  }
+  rule {
+    self        = true
+    ip_protocol = "udp"
+    from_port   = 1
+    to_port     = 65535
+  }
+  rule {
+    self        = true
+    ip_protocol = "tcp"
+    from_port   = 1
+    to_port     = 65535
+  }
+}
+
+resource "openstack_compute_secgroup_v2" "security_group_worker" {
+  name        = "${var.prefix}-worker"
+  description = "Give Access to kubernetes NodePort range"
+
+  rule {
+    cidr        = "0.0.0.0/0"
+    ip_protocol = "tcp"
+    from_port   = 30000
+    to_port     = 32767
   }
 }
 
 resource "openstack_compute_secgroup_v2" "security_group_mgmt" {
   name        = "${var.prefix}-mgmt"
-  description = "mgmt security group"
+  description = "mgmt security group (SSH)"
 
   rule {
     cidr        = "0.0.0.0/0"
@@ -45,45 +48,11 @@ resource "openstack_compute_secgroup_v2" "security_group_mgmt" {
     from_port   = 22
     to_port     = 22
   }
-
-  rule {
-    cidr        = "0.0.0.0/0"
-    ip_protocol = "icmp"
-    from_port   = -1
-    to_port     = -1
-  }
-}
-
-resource "openstack_compute_secgroup_v2" "security_group_management" {
-  name        = "${var.prefix}-management"
-  description = "management security group"
-
-  rule {
-    cidr        = "0.0.0.0/0"
-    ip_protocol = "tcp"
-    from_port   = 1
-    to_port     = 65535
-  }
-
-  rule {
-    cidr        = "0.0.0.0/0"
-    ip_protocol = "udp"
-    from_port   = 1
-    to_port     = 65535
-  }
-
-  rule {
-    cidr        = "0.0.0.0/0"
-    ip_protocol = "icmp"
-    from_port   = -1
-    to_port     = -1
-  }
 }
 
 ############
 # Networks #
 ############
-
 resource "openstack_networking_network_v2" "net_management" {
   name = "net-${var.prefix}-management"
   #  dns_domain = var.dns_domain
@@ -116,11 +85,3 @@ resource "openstack_networking_router_interface_v2" "router_interface" {
 data "openstack_networking_network_v2" "public" {
   name = var.public
 }
-
-# data "openstack_networking_network_v2" "net_management" {
-#   name = var.network_management
-# }
-
-# data "openstack_networking_subnet_v2" "subnet_management" {
-#   name = var.network_management
-# }
