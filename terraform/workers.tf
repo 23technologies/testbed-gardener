@@ -30,6 +30,10 @@ power_state:
   mode: reboot
   condition: True
 runcmd:
-  - curl https://get.k3s.io | K3S_TOKEN=${random_password.k3s_token.result} K3S_URL=https://garden-cluster-main:6443 INSTALL_K3S_EXEC="agent" sh -
+  - apt -y install docker.io
+  - systemctl enable docker --now
+  - apt -y install docker.io
+  - groupadd docker
+  - usermod -aG docker ${var.ssh_username}
 EOT
 }

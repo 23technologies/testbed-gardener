@@ -1,0 +1,36 @@
+nodes:
+%{ for controlplane in controlplanes ~}
+  - address: ${controlplane.name}
+    internal_address: ${controlplane.access_ip_v4}
+    user: ${ssh_username}
+    role:
+      - controlplane
+      - etcd
+%{ endfor ~}
+%{ for worker in workers ~}
+  - address: ${worker.name}
+    internal_address: ${worker.access_ip_v4}
+    user: ${ssh_username}
+    role:
+      - worker
+%{ endfor ~}
+cluster_name: ${prefix}
+network:
+  plugin: canal
+cloud_provider:
+    name: openstack
+    openstackCloudProvider:
+      global:
+        username: ${clouds.auth.username}
+        password: ${secure.auth.password}
+        auth-url: ${clouds.auth.auth_url}
+        tenant-name: ${clouds.auth.project_name}
+        domain-name: ${clouds.auth.project_domain_name}
+      load_balancer:
+        subnet-id: ${subnet.id}
+        use-octavia: true
+        floating-network-id: ${public.id}
+      block_storage:
+        bs-version: v2
+ingress:
+    provider: none

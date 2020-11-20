@@ -2,22 +2,21 @@
 
 # versions
 
-VERSION_DASHBOARD=2.0.4
 VERSION_GARDENCTL=0.23.0
 VERSION_K9S=0.22.1
+VERSION_RKE=1.0.14
 
-# prepare network
 
-ping -c 1 garden-cluster-main
-ping -c 1 garden-cluster-worker-0
-ping -c 1 garden-cluster-worker-1
-ping -c 1 garden-cluster-worker-2
-ping -c 1 garden-cluster-worker-3
-
+chmod 0600 $HOME/.ssh/id_rsa
 sudo apt-get install -y git
 
 sudo snap install kubectl --classic
 sudo snap install docker
+
+sudo /usr/bin/wget -O /usr/local/bin/rke https://github.com/rancher/rke/releases/download/v$VERSION_RKE/rke_linux-amd64
+sudo chmod +x /usr/local/bin/rke
+
+rke up
 
 cat <<EOT | sudo tee /var/snap/docker/current/config/daemon.json
 {
@@ -28,14 +27,11 @@ cat <<EOT | sudo tee /var/snap/docker/current/config/daemon.json
 EOT
 sudo snap restart docker
 
-chmod 0600 $HOME/.ssh/id_rsa
 mkdir -p $HOME/.kube
 chmod 0750 $HOME/.kube
-scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null garden-cluster-main:$HOME/k3s.yaml $HOME/.kube/config
-sed -i 's/127.0.0.1/garden-cluster-main/g' $HOME/.kube/config
+mv kube_config_cluster.yml .kube/config
 
 # https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
-
 git clone https://github.com/kubernetes/autoscaler
 pushd autoscaler/vertical-pod-autoscaler
 bash hack/vpa-up.sh
@@ -62,10 +58,10 @@ git clone https://github.com/gardener/sow
 echo "export PATH=$PATH:$HOME/sow/docker/bin" >> ~/.bashrc
 
 # apply openstack-cloud-controller
-kubectl apply -f ~/openstack.yaml
+#kubectl apply -f ~/openstack.yaml
 
 # apply cinder-csi
-kubectl apply -f ~/cinder.yaml
+#kubectl apply -f ~/cinder.yaml
 
 # create cloud.conf secret
-kubectl create secret generic cloud-config --from-file=$HOME/cloud.conf -n kube-system
+#kubectl create secret generic cloud-config --from-file=$HOME/cloud.conf -n kube-system
