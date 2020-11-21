@@ -2,7 +2,6 @@
 
 # versions
 
-VERSION_DASHBOARD=2.0.4
 VERSION_GARDENCTL=0.23.0
 VERSION_K9S=0.22.1
 
@@ -21,25 +20,25 @@ sudo snap install docker
 
 cat <<EOT | sudo tee /var/snap/docker/current/config/daemon.json
 {
-    "log-level":        "error",
-    "mtu":              1400,
-    "storage-driver":   "overlay2"
+    "log-level":       "error",
+    "mtu":             1400,
+    "storage-driver":  "overlay2"
 }
 EOT
 sudo snap restart docker
 
-chmod 0600 $HOME/.ssh/id_rsa
-mkdir -p $HOME/.kube
-chmod 0750 $HOME/.kube
-scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null garden-cluster-main:$HOME/k3s.yaml $HOME/.kube/config
-sed -i 's/127.0.0.1/garden-cluster-main/g' $HOME/.kube/config
+chmod 0600 "$HOME"/.ssh/id_rsa
+mkdir -p "$HOME"/.kube
+chmod 0750 "$HOME"/.kube
+scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null garden-cluster-main:"$HOME"/k3s.yaml "$HOME"/.kube/config
+sed -i 's/127.0.0.1/garden-cluster-main/g' "$HOME"/.kube/config
 
 # https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
 
 git clone https://github.com/kubernetes/autoscaler
-pushd autoscaler/vertical-pod-autoscaler
+pushd autoscaler/vertical-pod-autoscaler || exit
 bash hack/vpa-up.sh
-popd
+popd || exit
 
 # enable kubectl completion
 kubectl completion bash >> ~/.bashrc
@@ -68,4 +67,4 @@ kubectl apply -f ~/openstack.yaml
 kubectl apply -f ~/cinder.yaml
 
 # create cloud.conf secret
-kubectl create secret generic cloud-config --from-file=$HOME/cloud.conf -n kube-system
+kubectl create secret generic cloud-config --from-file="$HOME"/cloud.conf -n kube-system
