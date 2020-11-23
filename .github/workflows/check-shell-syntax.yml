@@ -5,14 +5,14 @@ on:
   push:
     paths:
       - '**.sh'
-      - .github/workflows/syntax-shell.yml
+      - .github/workflows/check-shell-syntax.yml
   pull_request:
     paths:
       - '**.sh'
-      - .github/workflows/syntax-shell.yml
+      - .github/workflows/check-shell-syntax.yml
 
 jobs:
-  shellcheck:
+  check-shell-syntax:
 
     runs-on: ubuntu-latest
 
