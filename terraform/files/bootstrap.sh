@@ -58,10 +58,10 @@ git clone https://github.com/gardener/sow
 echo "export PATH=$PATH:$HOME/sow/docker/bin" >> ~/.bashrc
 
 # apply openstack-cloud-controller
-#kubectl apply -f ~/openstack.yaml
+kubectl apply -f ~/openstack.yaml
 
 # apply cinder-csi
-#kubectl apply -f ~/cinder.yaml
+kubectl apply -f ~/cinder.yaml
 
 # create cloud.conf secret
-#kubectl create secret generic cloud-config --from-file=$HOME/cloud.conf -n kube-system
+kubectl create secret generic cloud-config --from-file=$HOME/cloud.conf -n kube-system
