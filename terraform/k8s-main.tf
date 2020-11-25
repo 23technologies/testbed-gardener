@@ -1,7 +1,8 @@
 resource "openstack_networking_port_v2" "main_port_management" {
-  count              = var.number_of_controlplane_nodes
-  network_id         = openstack_networking_network_v2.net_management.id
-  security_group_ids = [openstack_compute_secgroup_v2.security_group_default.id]
+  count      = var.number_of_controlplane_nodes
+  network_id = openstack_networking_network_v2.net_management.id
+  # the controlplane nodes get the worker-security group too becaus they forward NodePort traffic
+  security_group_ids = [openstack_compute_secgroup_v2.security_group_default.id, openstack_compute_secgroup_v2.security_group_worker.id]
 
   fixed_ip {
     ip_address = "10.40.10.1${count.index}"
