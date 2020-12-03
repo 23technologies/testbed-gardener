@@ -38,7 +38,7 @@ bash hack/vpa-up.sh
 popd
 
 # enable kubectl completion
-kubectl completion bash >> ~/.bashrc
+kubectl completion bash | sed 's/kubectl/k/gi' >> ~/.bashrc
 echo "alias k=kubectl" >> ~/.bashrc
 
 # install gardenctl
