@@ -4,54 +4,39 @@
 
 VERSION_GARDENCTL=0.23.0
 VERSION_K9S=0.22.1
+VERSION_RKE=1.2.3
 
-# prepare network
 
-ping -c 1 garden-cluster-main
-ping -c 1 garden-cluster-worker-0
-ping -c 1 garden-cluster-worker-1
-ping -c 1 garden-cluster-worker-2
-ping -c 1 garden-cluster-worker-3
-
+chmod 0600 "$HOME/.ssh/id_rsa"
 sudo apt-get install -y git
 
 sudo snap install kubectl --classic
-sudo snap install docker
 
-cat <<EOT | sudo tee /var/snap/docker/current/config/daemon.json
-{
-    "log-level":       "error",
-    "mtu":             1400,
-    "storage-driver":  "overlay2"
-}
-EOT
-sudo snap restart docker
-
-chmod 0600 "$HOME"/.ssh/id_rsa
-mkdir -p "$HOME"/.kube
-chmod 0750 "$HOME"/.kube
-scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null garden-cluster-main:"$HOME"/k3s.yaml "$HOME"/.kube/config
-sed -i 's/127.0.0.1/garden-cluster-main/g' "$HOME"/.kube/config
+sudo /usr/bin/wget -O "/usr/local/bin/rke https://github.com/rancher/rke/releases/download/v$VERSION_RKE/rke_linux-amd64"
+sudo chmod +x /usr/local/bin/rke
+rke up
+mkdir -p "$HOME/.kube"
+chmod 0750 "$HOME/.kube"
+mv kube_config_cluster.yml .kube/config
 
 # https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
-
 git clone https://github.com/kubernetes/autoscaler
 pushd autoscaler/vertical-pod-autoscaler || exit
 bash hack/vpa-up.sh
 popd || exit
 
 # enable kubectl completion
-kubectl completion bash >> ~/.bashrc
+kubectl completion bash | sed 's/kubectl/k/gi' >> ~/.bashrc
 echo "alias k=kubectl" >> ~/.bashrc
 
 # install gardenctl
 
-sudo curl -L -o /usr/local/bin/gardenctl https://github.com/garden-cluster/gardenctl/releases/download/v$VERSION_GARDENCTL/gardenctl-linux-amd64
+sudo curl -L -o /usr/local/bin/gardenctl https://github.com/garden-cluster/gardenctl/releases/download/v"$VERSION_GARDENCTL"/gardenctl-linux-amd64
 sudo chmod +x /usr/local/bin/gardenctl
 
 # install k9s
 
-curl -L https://github.com/derailed/k9s/releases/download/v$VERSION_K9S/k9s_Linux_x86_64.tar.gz | sudo tar xzf - -C /usr/local/bin/
+curl -L https://github.com/derailed/k9s/releases/download/v"$VERSION_K9S"/k9s_Linux_x86_64.tar.gz | sudo tar xzf - -C /usr/local/bin/
 sudo chmod +x /usr/local/bin/k9s
 
 # install sow

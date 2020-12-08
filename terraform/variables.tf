@@ -34,7 +34,12 @@ variable "flavor_mgmt" {
 }
 
 variable "number_of_workers" {
-  default = 4
+  default = 3
+  type    = number
+}
+
+variable "number_of_controlplane_nodes" {
+  default = 3
   type    = number
 }
 

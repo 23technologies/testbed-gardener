@@ -449,7 +449,6 @@ spec:
         - name: pods-cloud-data
           hostPath:
             path: /var/lib/cloud/data
-            type: Directory
         - name: pods-probe-dir
           hostPath:
             path: /dev

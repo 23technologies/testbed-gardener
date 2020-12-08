@@ -46,9 +46,18 @@ final_message: "The system is finally up, after $UPTIME seconds"
 power_state:
   mode: reboot
   condition: True
+write_files:
+- encoding: b64
+  content: ewogICJtdHUiOiAxNDAwCn0K # set mtu 1400
+  owner: root:root
+  path: /tmp/daemon.json
+  permissions: '0644'
 runcmd:
+  - mkdir /etc/docker
+  - mv /tmp/daemon.json /etc/docker/daemon.json
   - groupadd docker
   - usermod -aG docker ${var.ssh_username}
+  - apt -y install docker.io
 EOT
 
   connection {
@@ -75,6 +84,18 @@ EOT
   provisioner "file" {
     source      = "files/bootstrap.sh"
     destination = "/home/${var.ssh_username}/bootstrap.sh"
+  }
+
+  provisioner "file" {
+    content = templatefile("files/cluster.yml.tmpl", { ssh_username = var.ssh_username,
+      prefix        = var.prefix,
+      controlplanes = openstack_compute_instance_v2.main_server,
+      workers       = openstack_compute_instance_v2.worker,
+      clouds        = local.clouds,
+      secure        = local.secure,
+      subnet        = openstack_networking_subnet_v2.subnet_management,
+    public = data.openstack_networking_network_v2.public })
+    destination = "/home/${var.ssh_username}/cluster.yml"
   }
 
   provisioner "file" {

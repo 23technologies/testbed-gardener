@@ -29,7 +29,18 @@ final_message: "The system is finally up, after $UPTIME seconds"
 power_state:
   mode: reboot
   condition: True
+write_files:
+- encoding: b64
+  content: ewogICJtdHUiOiAxNDAwCn0K # set mtu 1400
+  owner: root:root
+  path: /tmp/daemon.json
+  permissions: '0644'
 runcmd:
-  - curl https://get.k3s.io | K3S_TOKEN=${random_password.k3s_token.result} K3S_URL=https://garden-cluster-main:6443 INSTALL_K3S_EXEC="agent" sh -
+  - mkdir /etc/docker
+  - mv /tmp/daemon.json /etc/docker/daemon.json
+  - groupadd docker
+  - usermod -aG docker ${var.ssh_username}
+  - apt -y install docker.io
+  - systemctl enable docker --now
 EOT
 }

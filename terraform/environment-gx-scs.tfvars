@@ -1,6 +1,6 @@
 availability_zone         = "nova"
 cloud_provider            = "gx-scs"
-dns_domain                = "gardener-test.site"
+dns_domain                = "prod.gardener-test.site"
 flavor_main               = "4C-8GB-60GB"
 flavor_mgmt               = "2C-2GB-20GB"
 flavor_worker             = "4C-8GB-60GB"

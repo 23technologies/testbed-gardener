@@ -1,0 +1,23 @@
+nodes:
+%{ for controlplane in controlplanes ~}
+  - address: ${controlplane.name}
+    internal_address: ${controlplane.access_ip_v4}
+    user: ${ssh_username}
+    role:
+      - controlplane
+      - etcd
+%{ endfor ~}
+%{ for worker in workers ~}
+  - address: ${worker.name}
+    internal_address: ${worker.access_ip_v4}
+    user: ${ssh_username}
+    role:
+      - worker
+%{ endfor ~}
+cluster_name: ${prefix}
+network:
+  plugin: flannel
+cloud_provider:
+    name: external
+ingress:
+    provider: none
