@@ -11,22 +11,10 @@ chmod 0600 $HOME/.ssh/id_rsa
 sudo apt-get install -y git
 
 sudo snap install kubectl --classic
-sudo snap install docker
 
 sudo /usr/bin/wget -O /usr/local/bin/rke https://github.com/rancher/rke/releases/download/v$VERSION_RKE/rke_linux-amd64
 sudo chmod +x /usr/local/bin/rke
-
 rke up
-
-cat <<EOT | sudo tee /var/snap/docker/current/config/daemon.json
-{
-    "log-level":        "error",
-    "mtu":              1400,
-    "storage-driver":   "overlay2"
-}
-EOT
-sudo snap restart docker
-
 mkdir -p $HOME/.kube
 chmod 0750 $HOME/.kube
 mv kube_config_cluster.yml .kube/config
