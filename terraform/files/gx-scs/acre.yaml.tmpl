@@ -12,6 +12,10 @@ credentials: &openstack
 landscape:
   name: gardener-okeanos-xyz
   domain: ${dns_domain}
+  cert-manager:
+    email: muench@23technologies.cloud
+    server:
+      url: live
 
   gardener:
     extensions:
@@ -47,7 +51,7 @@ landscape:
       mode: seed
       seedConfig:
         backup:
-          active: false
+          active: true
       region: ${clouds.region_name}
       zones:
         - nova
@@ -82,7 +86,9 @@ landscape:
 
   etcd:
     backup:
-      active: false
+      type: swift
+      credentials: *openstack
+      active: true
 
   identity:
     users:
