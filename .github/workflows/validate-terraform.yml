@@ -12,12 +12,12 @@ on:
       - '.github/workflows/validate-terraform.yml'
 
 jobs:
-  default:
+  validate-terraform:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         terraform-version:
-          - 0.13.4
+          - 0.13.5
 
     steps:
       - name: Checkout

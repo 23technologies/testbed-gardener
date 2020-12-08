@@ -21,9 +21,9 @@ mv kube_config_cluster.yml .kube/config
 
 # https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
 git clone https://github.com/kubernetes/autoscaler
-pushd autoscaler/vertical-pod-autoscaler
+pushd autoscaler/vertical-pod-autoscaler || exit
 bash hack/vpa-up.sh
-popd
+popd || exit
 
 # enable kubectl completion
 kubectl completion bash | sed 's/kubectl/k/gi' >> ~/.bashrc
@@ -52,4 +52,4 @@ kubectl apply -f ~/openstack.yaml
 kubectl apply -f ~/cinder.yaml
 
 # create cloud.conf secret
-kubectl create secret generic cloud-config --from-file=$HOME/cloud.conf -n kube-system
+kubectl create secret generic cloud-config --from-file="$HOME"/cloud.conf -n kube-system

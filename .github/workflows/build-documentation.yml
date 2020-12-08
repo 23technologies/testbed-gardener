@@ -1,5 +1,5 @@
 ---
-name: Sphinx
+name: Build documentation
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
       - 'docs/**'
 
 jobs:
-  default:
+  build-documentation:
 
     runs-on: ubuntu-latest
 

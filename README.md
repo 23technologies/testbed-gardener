@@ -1,4 +1,4 @@
-# testbed-gardener-openstack
+# testbed-gardener
 
 A virtual testbed environment for [Gardener](https://gardener.cloud).
 

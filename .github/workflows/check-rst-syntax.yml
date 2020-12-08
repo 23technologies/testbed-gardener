@@ -5,12 +5,14 @@ on:
   push:
     paths:
       - '**.rst'
+      - .github/workflows/check-rst-syntax.yml
   pull_request:
     paths:
       - '**.rst'
+      - .github/workflows/check-rst-syntax.yml
 
 jobs:
-  default:
+  check-rst-syntax:
 
     runs-on: ubuntu-latest
 
