@@ -15,8 +15,8 @@ sudo snap install kubectl --classic
 sudo /usr/bin/wget -O /usr/local/bin/rke https://github.com/rancher/rke/releases/download/v$VERSION_RKE/rke_linux-amd64
 sudo chmod +x /usr/local/bin/rke
 rke up
-mkdir -p $HOME/.kube
-chmod 0750 $HOME/.kube
+mkdir -p "$HOME/.kube"
+chmod 0750 "$HOME/.kube"
 mv kube_config_cluster.yml .kube/config
 
 # https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
