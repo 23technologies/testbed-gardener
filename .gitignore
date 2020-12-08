@@ -1,6 +1,7 @@
 .MGMT_ADDRESS.*
 .deploy.*
 .id_rsa.*
+.terraform.*
 .terraform
 .tox
 .venv
