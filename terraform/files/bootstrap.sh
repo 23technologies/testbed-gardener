@@ -53,3 +53,8 @@ kubectl apply -f ~/cinder.yaml
 
 # create cloud.conf secret
 kubectl create secret generic cloud-config --from-file="$HOME"/cloud.conf -n kube-system
+
+# install yq for keycloak integration
+sudo snap install yq
+
+bash deploy.sh

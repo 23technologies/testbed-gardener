@@ -8,6 +8,7 @@ cp "$HOME"/.kube/config landscape/kubeconfig
 cp "$HOME"/acre.yaml landscape/
 
 pushd landscape || exit
-sow order -A
-sow deploy -A
+#$HOME/sow/docker/bin/sow order -A
+"$HOME"/sow/docker/bin/sow deploy -A
 popd || exit
+bash install_keycloak.sh

@@ -82,6 +82,11 @@ EOT
   }
 
   provisioner "file" {
+    source      = "files/install_keycloak.sh"
+    destination = "/home/${var.ssh_username}/install_keycloak.sh"
+  }
+
+  provisioner "file" {
     source      = "files/bootstrap.sh"
     destination = "/home/${var.ssh_username}/bootstrap.sh"
   }
@@ -109,7 +114,7 @@ EOT
   }
 
   provisioner "local-exec" {
-    command = "sleep 120"
+    command = "sleep 180"
   }
 
   provisioner "remote-exec" {
@@ -118,3 +123,5 @@ EOT
     ]
   }
 }
+
+
