@@ -42,10 +42,6 @@ resource "openstack_compute_instance_v2" "mgmt_server" {
 #cloud-config
 package_update: true
 package_upgrade: true
-final_message: "The system is finally up, after $UPTIME seconds"
-power_state:
-  mode: reboot
-  condition: True
 write_files:
 - encoding: b64
   content: ewogICJtdHUiOiAxNDAwCn0K # set mtu 1400
@@ -104,6 +100,11 @@ EOT
   }
 
   provisioner "file" {
+    source      = "files/wait.sh"
+    destination = "/home/${var.ssh_username}/wait.sh"
+  }
+
+  provisioner "file" {
     source      = "files/deploy.sh"
     destination = "/home/${var.ssh_username}/deploy.sh"
   }
@@ -113,10 +114,11 @@ EOT
     destination = "/home/${var.ssh_username}"
   }
 
-  provisioner "local-exec" {
-    command = "sleep 180"
+  provisioner "remote-exec" {
+    inline = [
+      "bash /home/ubuntu/wait.sh"
+    ]
   }
-
   provisioner "remote-exec" {
     inline = [
       "bash /home/ubuntu/bootstrap.sh"
