@@ -1,0 +1,93 @@
+---
+credentials: &openstack
+  username: ${clouds.auth.username}
+  password: ${secure.auth.password}
+  tenantName: ${clouds.auth.project_name}
+  domainName: ${clouds.auth.project_domain_name}
+  userDomainName: ${clouds.auth.user_domain_name}
+  authURL: ${clouds.auth.auth_url}
+  OS_AUTH_URL: ${clouds.auth.auth_url}
+  region:  ${clouds.region_name}
+
+landscape:
+  name: gardener-bc
+  domain: ${dns_domain}
+
+  gardener:
+    extensions:
+      provider-openstack:
+        valueOverwrites:
+          config:
+            etcd:
+              storage:
+                className: cinder-default
+                capacity: 25Gi
+                provisioner: cinder.csi.openstack.org
+      networking-calico:
+        valueOverwrites:
+          vethMTU: 1400
+
+  monitoring:
+    active: true
+    username: admin
+    password: password
+
+  cluster:
+    kubeconfig: ./kubeconfig
+    domain: ${dns_domain}
+    iaas: openstack
+    networks:
+      nodes: 10.45.0.0/16
+      pods: 10.44.0.0/16
+      services: 10.43.0.0/16
+
+  iaas:
+    - name: openstack
+      type: openstack
+      mode: seed
+      seedConfig:
+        backup:
+          active: true
+      region: ${clouds.region_name}
+      zones:
+        - nova
+      credentials: *openstack
+      floatingPools:
+        - name: ${public}
+      loadBalancerProviders:
+        - name: amphora
+      useOctavia: true
+      machineTypes:
+        - name: ${flavor_worker}
+          cpu: "4"
+          gpu: "0"
+          memory: 8Gi
+          usable: true
+          storage:
+            class: default
+            type: default
+            size: 40Gi
+      machineImageDefinitions:
+        - name: ubuntu
+          versions:
+            - version: default
+              image: Ubuntu 20.04
+              regions:
+                - name: RegionOne
+                  id: 297097c3-d401-4cc2-8a17-060f3ffabb41
+      machineImages:
+        - name: ubuntu
+          versions:
+            - version: default
+
+  etcd:
+    backup:
+      type: swift
+      credentials: *openstack
+      active: true
+
+  identity:
+    users:
+      - email: admin@${dns_domain}
+        username: admin
+        password: ${pw}
