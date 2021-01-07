@@ -98,8 +98,8 @@ EOT
     public = data.openstack_networking_network_v2.public })
     destination = "/home/${var.ssh_username}/cluster.yml"
   }
-  
-provisioner "file" {
+
+  provisioner "file" {
     source      = "files/wait.sh"
     destination = "/home/${var.ssh_username}/wait.sh"
   }
