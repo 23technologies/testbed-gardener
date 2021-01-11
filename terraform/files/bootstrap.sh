@@ -58,4 +58,4 @@ kubectl create secret generic cloud-config --from-file="$HOME"/cloud.conf -n kub
 sudo snap install yq
 
 bash deploy.sh
-sudo reboot
+sudo shutdown -r
