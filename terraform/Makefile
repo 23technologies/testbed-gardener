@@ -48,6 +48,21 @@ clean: init
 	@terraform workspace select default
 	@terraform workspace delete $(ENVIRONMENT)
 
+purge:
+	@echo "Warning, going to delete ALL resources in $(ENVIRONMENT), even those that have not been created by the testbed."
+	@read -p "Continue? (y/n) " -r; \
+        if [[ ! $$REPLY =~ ^[Yy] ]]; \
+        then \
+			exit 1; \
+        fi
+	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
+	@rm -f .deploy.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
+	@rm -f .id_rsa.$(ENVIRONMENT)
+	@terraform workspace select default
+	@terraform workspace delete -force $(ENVIRONMENT) 
+	@openstack keypair delete garden-cluster
+	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
+
 list: init
 	@terraform state list
 
@@ -112,4 +127,4 @@ login: ssh
 log: console
 tunnel: sshuttle
 
-PHONY: clean console attach detach sshuttle ssh dry-run list deploy watch openstack create log login dashboard
+PHONY: clean purge console attach detach sshuttle ssh dry-run list deploy watch openstack create log login dashboard 

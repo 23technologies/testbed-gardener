@@ -18,6 +18,8 @@ A documentation with the individual steps can be found in the repository
 * ``terraform/clouds.yaml`` and ``terraform/secure.yaml`` files must be created
   (https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#clouds-yaml)
 * ``terraform/files/gx-scs/credentials.yaml`` file must be created
+* ospurge is required for project-cleanup (be careful):
+``python3 -m pip install git+https://git.openstack.org/openstack/ospurge``
 
 ## Usage
 
