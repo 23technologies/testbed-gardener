@@ -7,7 +7,6 @@ USER=user
 PW=""
 TESTUSER=test01
 TESTPW=$(rand)
-URL="https://$(kubectl get ingress -n garden gardener-dashboard-ingress -o=jsonpath='{.spec.rules[0].host}')/*"
 REALM=gardener
 CLIENT=gardener
 CLIENT_SECRET=""
@@ -25,6 +24,7 @@ do
 done
 PW=$(kubectl get secret --namespace default keycloak-23t-env-vars -o jsonpath="{.data.KEYCLOAK_ADMIN_PASSWORD}" | base64 --decode)
 ISSUER="http://$(kubectl get service keycloak-23t -o jsonpath='{.status.loadBalancer.ingress[0].ip}')/auth/realms/$REALM"
+URL="https://$(kubectl get ingress -n garden gardener-dashboard-ingress -o=jsonpath='{.spec.rules[0].host}')/*"
 
 # Wait for the rollout...
 kubectl rollout status statefulset keycloak-23t
