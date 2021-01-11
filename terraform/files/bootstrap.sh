@@ -8,8 +8,8 @@ VERSION_RKE=1.2.3
 
 
 chmod 0600 "$HOME/.ssh/id_rsa"
-sudo apt-get install -y git
 
+sudo apt-get install -y git
 sudo snap install kubectl --classic
 
 sudo /usr/bin/wget -O /usr/local/bin/rke "https://github.com/rancher/rke/releases/download/v$VERSION_RKE/rke_linux-amd64"
@@ -58,3 +58,4 @@ kubectl create secret generic cloud-config --from-file="$HOME"/cloud.conf -n kub
 sudo snap install yq
 
 bash deploy.sh
+sudo reboot
