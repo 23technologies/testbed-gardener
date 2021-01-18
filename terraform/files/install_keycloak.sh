@@ -16,6 +16,7 @@ ISSUER=""
 # Installation
 sudo snap install helm --classic
 helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
 helm install keycloak-23t bitnami/keycloak
 while [ -z "$(kubectl get svc keycloak-23t -o jsonpath="{.status.loadBalancer.ingress[0].ip}")" ]
 do
