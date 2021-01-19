@@ -113,7 +113,7 @@ EOT
     source      = "files/kubernetes-manifests.d/"
     destination = "/home/${var.ssh_username}"
   }
- 
+
   provisioner "file" {
     source      = "files/patch_dashboard.sh"
     destination = "/home/${var.ssh_username}"
