@@ -11,4 +11,3 @@ pushd landscape || exit
 #$HOME/sow/docker/bin/sow order -A
 "$HOME"/sow/docker/bin/sow deploy -A
 popd || exit
-bash install_keycloak.sh

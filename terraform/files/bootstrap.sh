@@ -58,4 +58,6 @@ kubectl create secret generic cloud-config --from-file="$HOME"/cloud.conf -n kub
 sudo snap install yq
 
 bash deploy.sh
+bash patch_dashboard.sh
+bash install_keycloak.sh
 sudo shutdown -r
