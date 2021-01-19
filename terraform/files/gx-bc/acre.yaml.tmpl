@@ -47,10 +47,10 @@ landscape:
       mode: seed
       seedConfig:
         backup:
-          active: true
+          active: false
       region: ${clouds.region_name}
       zones:
-        - nova
+        - south-2
       credentials: *openstack
       floatingPools:
         - name: ${public}
@@ -70,7 +70,7 @@ landscape:
       machineImageDefinitions:
         - name: ubuntu
           versions:
-            - version: default
+            - version: 20.4.20210107
               image: Ubuntu 20.04
               regions:
                 - name: RegionOne
@@ -78,8 +78,8 @@ landscape:
       machineImages:
         - name: ubuntu
           versions:
-            - version: default
-
+            - version: 20.4.20210107
+  
   etcd:
     backup:
       type: swift

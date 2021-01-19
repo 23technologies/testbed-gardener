@@ -1,7 +1,7 @@
 # Makefile
 
 CONSOLE = mgmt
-ENVIRONMENT = gx-scs-staging
+ENVIRONMENT = gx-scs
 OPENSTACK = openstack
 USERNAME = ubuntu
 
@@ -68,7 +68,7 @@ list: init
 
 ssh: .MGMT_ADDRESS.$(ENVIRONMENT) .id_rsa.$(ENVIRONMENT)
 	@source ./.MGMT_ADDRESS.$(ENVIRONMENT); \
-	ssh -o StrictHostKeyChecking=no -i .id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMT_ADDRESS
+	ssh -o StrictHostKeyChecking=no -o IdentitiesOnly=yes -i .id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMT_ADDRESS
 
 deploy: .MGMT_ADDRESS.$(ENVIRONMENT) .id_rsa.$(ENVIRONMENT)
 	@source ./.MGMT_ADDRESS.$(ENVIRONMENT); \

@@ -114,6 +114,11 @@ EOT
     destination = "/home/${var.ssh_username}"
   }
 
+  provisioner "file" {
+    source      = "files/patch_dashboard.sh"
+    destination = "/home/${var.ssh_username}/patch_dashboard.sh"
+  }
+
   provisioner "remote-exec" {
     inline = [
       "bash /home/ubuntu/wait.sh"
