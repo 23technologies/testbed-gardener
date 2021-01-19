@@ -1,7 +1,7 @@
 # Makefile
 
 CONSOLE = mgmt
-ENVIRONMENT = gx-scs
+ENVIRONMENT = gx-bc
 OPENSTACK = openstack
 USERNAME = ubuntu
 
@@ -59,8 +59,8 @@ purge:
 	@rm -f .deploy.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
 	@rm -f .id_rsa.$(ENVIRONMENT)
 	@terraform workspace select default
-	@terraform workspace delete -force $(ENVIRONMENT) 
-	@openstack keypair delete garden-cluster
+	@terraform workspace delete -force $(ENVIRONMENT)
+	for i in `openstack --os-cloud gx-bc keypair list -c Name -f value`; do openstack keypair delete $$i; done
 	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
 
 list: init
