@@ -116,7 +116,7 @@ EOT
 
   provisioner "file" {
     source      = "files/patch_dashboard.sh"
-    destination = "/home/${var.ssh_username}"
+    destination = "/home/${var.ssh_username}/patch_dashboard.sh"
   }
 
   provisioner "remote-exec" {
