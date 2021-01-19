@@ -98,6 +98,18 @@ EOT
     public = data.openstack_networking_network_v2.public })
     destination = "/home/${var.ssh_username}/cluster.yml"
   }
+  
+  provisioner "file" {
+    content = templatefile("files/node_readyness.sh.tmpl", { ssh_username = var.ssh_username,
+      prefix        = var.prefix,
+      controlplanes = openstack_compute_instance_v2.main_server,
+      workers       = openstack_compute_instance_v2.worker,
+      clouds        = local.clouds,
+      secure        = local.secure,
+      subnet        = openstack_networking_subnet_v2.subnet_management,
+    public = data.openstack_networking_network_v2.public })
+    destination = "/home/${var.ssh_username}/node_readyness.sh"
+  }
 
   provisioner "file" {
     source      = "files/wait.sh"
@@ -117,6 +129,11 @@ EOT
   provisioner "file" {
     source      = "files/patch_dashboard.sh"
     destination = "/home/${var.ssh_username}/patch_dashboard.sh"
+  }
+  
+  provisioner "file" {
+    source      = "files/node_readyness.sh"
+    destination = "/home/${var.ssh_username}/node_readyness.sh"
   }
 
   provisioner "remote-exec" {

@@ -12,6 +12,8 @@ chmod 0600 "$HOME/.ssh/id_rsa"
 sudo apt-get install -y git
 sudo snap install kubectl --classic
 
+bash node_readyness.sh
+
 sudo /usr/bin/wget -O /usr/local/bin/rke "https://github.com/rancher/rke/releases/download/v$VERSION_RKE/rke_linux-amd64"
 sudo chmod +x /usr/local/bin/rke
 rke up
