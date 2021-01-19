@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+HOSTS="%{ for controlplane in controlplanes ~}${controlplane.access_ip_v4} %{ endfor ~}%{ for worker in workers ~}${worker.access_ip_v4} %{ endfor ~}"
+
+
+
+for host in $HOSTS
+do 
+  ssh -o StrictHostKeyChecking=no $host 'docker ps' > /dev/null 2> /dev/null
+  while [ 0 -ne "$?" ]
+  do
+   echo "waiting for Node: $host"
+   sleep 5
+   ssh -o StrictHostKeyChecking=no $host 'docker ps' > /dev/null 2> /dev/null
+  done
+done  
