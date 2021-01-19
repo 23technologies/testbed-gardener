@@ -131,11 +131,6 @@ EOT
     destination = "/home/${var.ssh_username}/patch_dashboard.sh"
   }
 
-  provisioner "file" {
-    source      = "files/node_readyness.sh"
-    destination = "/home/${var.ssh_username}/node_readyness.sh"
-  }
-
   provisioner "remote-exec" {
     inline = [
       "bash /home/ubuntu/wait.sh"
