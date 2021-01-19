@@ -98,7 +98,7 @@ EOT
     public = data.openstack_networking_network_v2.public })
     destination = "/home/${var.ssh_username}/cluster.yml"
   }
-  
+
   provisioner "file" {
     content = templatefile("files/node_readyness.sh.tmpl", { ssh_username = var.ssh_username,
       prefix        = var.prefix,
@@ -130,7 +130,7 @@ EOT
     source      = "files/patch_dashboard.sh"
     destination = "/home/${var.ssh_username}/patch_dashboard.sh"
   }
-  
+
   provisioner "file" {
     source      = "files/node_readyness.sh"
     destination = "/home/${var.ssh_username}/node_readyness.sh"
