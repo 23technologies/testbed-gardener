@@ -10,7 +10,7 @@ credentials: &openstack
   region:  ${clouds.region_name}
 
 landscape:
-  name: gardener-okeanos-xyz
+  name: ${cloud_provider}
   domain: ${dns_domain}
   cert-manager:
     email: muench@23technologies.cloud
