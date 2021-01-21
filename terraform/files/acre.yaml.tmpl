@@ -10,8 +10,12 @@ credentials: &openstack
   region:  ${clouds.region_name}
 
 landscape:
-  name: gardener-okeanos-xyz
+  name: ${cloud_provider}
   domain: ${dns_domain}
+  cert-manager:
+    email: ${letsencrypt_mail}
+    server:
+      url: ${letsencrypt_live ? "live" : "staging"}
 
   gardener:
     extensions:
@@ -50,7 +54,7 @@ landscape:
           active: true
       region: ${clouds.region_name}
       zones:
-        - nova
+        - ${availability_zone}
       credentials: *openstack
       floatingPools:
         - name: ${public}
@@ -59,22 +63,19 @@ landscape:
       useOctavia: true
       machineTypes:
         - name: ${flavor_worker}
-          cpu: "4"
+          cpu: "${flavor_worker_cpu}"
           gpu: "0"
-          memory: 8Gi
+          memory: ${flavor_worker_memory}
           usable: true
           storage:
             class: default
             type: default
-            size: 60Gi
+            size: ${flavor_worker_disk}
       machineImageDefinitions:
         - name: ubuntu
           versions:
             - version: 20.4.20201016
-              image: Ubuntu 20.04
-              regions:
-                - name: RegionOne
-                  id: c815c712-b125-4ae9-b3b6-efa2a1ed1605
+              image: ${image}
       machineImages:
         - name: ubuntu
           versions:
@@ -84,7 +85,7 @@ landscape:
     backup:
       type: swift
       credentials: *openstack
-      active: true
+      active: ${backup_enabled}
 
   identity:
     users:

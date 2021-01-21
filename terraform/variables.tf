@@ -28,6 +28,21 @@ variable "flavor_worker" {
   type    = string
 }
 
+variable "flavor_worker_cpu" {
+  default = "4"
+  type    = string
+}
+
+variable "flavor_worker_memory" {
+  default = "8Gi"
+  type    = string
+}
+
+variable "flavor_worker_disk" {
+  default = "60Gi"
+  type    = string
+}
+
 variable "flavor_mgmt" {
   default = "2C-2GB-20GB"
   type    = string
@@ -72,3 +87,17 @@ variable "ssh_username" {
   default = "ubuntu"
   type    = string
 }
+
+variable "letsencrypt_live" {
+  default = false
+}
+
+variable "letsencrypt_mail" {
+  type = string
+}
+
+variable "backup_enabled" {
+  default = "false"
+  type    = string
+}
+
