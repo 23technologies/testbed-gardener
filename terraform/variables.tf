@@ -101,7 +101,3 @@ variable "backup_enabled" {
   type    = string
 }
 
-variable "default_image_id" {
-  type = string
-}
-
