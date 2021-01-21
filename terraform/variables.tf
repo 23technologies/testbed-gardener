@@ -85,3 +85,8 @@ variable "backup_enabled" {
   default = "false"
   type    = string
 }
+
+variable "default_image_id" {
+  type    = string
+}
+
