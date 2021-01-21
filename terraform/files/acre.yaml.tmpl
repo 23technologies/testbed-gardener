@@ -63,14 +63,14 @@ landscape:
       useOctavia: true
       machineTypes:
         - name: ${flavor_worker}
-          cpu: "4"
+          cpu: "${flavor_worker_cpu}"
           gpu: "0"
-          memory: 8Gi
+          memory: ${flavor_worker_memory}
           usable: true
           storage:
             class: default
             type: default
-            size: 60Gi
+            size: ${flavor_worker_disk}
       machineImageDefinitions:
         - name: ubuntu
           versions:

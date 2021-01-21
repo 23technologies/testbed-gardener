@@ -28,6 +28,21 @@ variable "flavor_worker" {
   type    = string
 }
 
+variable "flavor_worker_cpu" {
+  default = "4"
+  type    = string
+}
+
+variable "flavor_worker_memory" {
+  default = "8Gi"
+  type    = string
+}
+
+variable "flavor_worker_disk" {
+  default = "60Gi"
+  type    = string
+}
+
 variable "flavor_mgmt" {
   default = "2C-2GB-20GB"
   type    = string
@@ -78,7 +93,7 @@ variable "letsencrypt_live" {
 }
 
 variable "letsencrypt_mail" {
-  type    = string
+  type = string
 }
 
 variable "backup_enabled" {
@@ -87,6 +102,6 @@ variable "backup_enabled" {
 }
 
 variable "default_image_id" {
-  type    = string
+  type = string
 }
 
