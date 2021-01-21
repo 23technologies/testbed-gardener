@@ -10,3 +10,4 @@ network_management        = "gardener"
 public                    = "ext01"
 letsencrypt_mail          = "muench@23technologies.cloud"
 letsencrypt_live          = true
+backup_enabled            = "true"

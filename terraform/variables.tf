@@ -80,3 +80,8 @@ variable "letsencrypt_live" {
 variable "letsencrypt_mail" {
   type    = string
 }
+
+variable "backup_enabled" {
+  default = "false"
+  type    = string
+}
