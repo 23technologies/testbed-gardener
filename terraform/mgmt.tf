@@ -68,7 +68,7 @@ EOT
   }
 
   provisioner "file" {
-    content     = templatefile("files/${var.cloud_provider}/acre.yaml.tmpl", { cloud_provider = var.cloud_provider, clouds = local.clouds, secure = local.secure, public = var.public, dns_domain = var.dns_domain, availability_zone = var.availability_zone, flavor_worker = var.flavor_worker, pw = random_password.gardener_password.result })
+    content     = templatefile("files/${var.cloud_provider}/acre.yaml.tmpl", { letsencrypt_live = var.letsencrypt_live, letsencrypt_mail = var.letsencrypt_mail, cloud_provider = var.cloud_provider, clouds = local.clouds, secure = local.secure, public = var.public, dns_domain = var.dns_domain, availability_zone = var.availability_zone, flavor_worker = var.flavor_worker, pw = random_password.gardener_password.result })
     destination = "/home/${var.ssh_username}/acre.yaml"
   }
 

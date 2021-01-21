@@ -13,9 +13,9 @@ landscape:
   name: ${cloud_provider}
   domain: ${dns_domain}
   cert-manager:
-    email: muench@23technologies.cloud
+    email: ${letsencrypt_mail}
     server:
-      url: live
+      url: ${letsencrypt_live ? "live" : "staging"}
 
   gardener:
     extensions:

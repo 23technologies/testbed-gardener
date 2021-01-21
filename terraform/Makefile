@@ -1,7 +1,7 @@
 # Makefile
 
 CONSOLE = mgmt
-ENVIRONMENT = gx-bc
+ENVIRONMENT = gx-scs-staging
 OPENSTACK = openstack
 USERNAME = ubuntu
 

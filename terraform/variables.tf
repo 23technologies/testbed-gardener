@@ -72,3 +72,11 @@ variable "ssh_username" {
   default = "ubuntu"
   type    = string
 }
+
+variable "letsencrypt_live" {
+  default = false
+}
+
+variable "letsencrypt_mail" {
+  type    = string
+}
