@@ -60,7 +60,7 @@ purge:
 	@rm -f .id_rsa.$(ENVIRONMENT)
 	@terraform workspace select default
 	@terraform workspace delete -force $(ENVIRONMENT) 
-	@openstack keypair delete garden-cluster
+	@openstack keypair delete garden-cluster-$(ENVIRONMENT)
 	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
 
 purge-ssh-keys:
