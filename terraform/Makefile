@@ -60,8 +60,11 @@ purge:
 	@rm -f .id_rsa.$(ENVIRONMENT)
 	@terraform workspace select default
 	@terraform workspace delete -force $(ENVIRONMENT) 
-	for i in `openstack --os-cloud $(ENVIROMENT) keypair list -c Name -f value`; do openstack keypair delete $$i; done
+	@openstack keypair delete garden-cluster
 	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
+
+purge-ssh-keys:
+	for i in `openstack --os-cloud $(ENVIROMENT) keypair list -c Name -f value`; do openstack keypair delete $$i; done
 
 list: init
 	@terraform state list
