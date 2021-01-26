@@ -71,6 +71,11 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 0.14.2
+      - name: Display IP
+        shell: bash
+        working-directory: ./terraform
+        run: |
+          curl https://ipv4.stablerock.de
       - name: Create clouds.yaml file
         shell: bash
         working-directory: ./terraform
