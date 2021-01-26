@@ -1,13 +1,11 @@
 ---
 clouds:
-  gx-scs:
+  default:
     auth:
-      auth_url: https://gx-scs.okeanos.dev:5000/v3
+      auth_url: https://api-1.betacloud.de:5000/v3
       username:
       project_name:
       user_domain_name:
       project_domain_name:
-    region_name: "RegionOne"
-    interface: "public"
+    region: betacloud-1
     identity_api_version: 3
-    image_api_version: 2
