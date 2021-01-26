@@ -1,5 +1,5 @@
 variable "cloud_provider" {
-  default = "betacloud"
+  default = "default"
   type    = string
 }
 

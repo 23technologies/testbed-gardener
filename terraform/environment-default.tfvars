@@ -1,5 +1,5 @@
 availability_zone         = "south-2"                               # OpenStack availability zone
-cloud_provider            = "betacloud"                             # has to be the same value as in the Makefile (environment) and in the clouds.yaml
+cloud_provider            = "default"                               # has to be the same value as in the Makefile (environment) and in the clouds.yaml
 dns_domain                = "gardener-1.23technologies.xyz"         # domain for the gardener instace
 flavor_main               = "4C-8GB-40GB"                           # flavor for the garden-cluster kubernetes control-plane nodes
 flavor_mgmt               = "2C-2GB-20GB"                           # flavor for the installation and management server
