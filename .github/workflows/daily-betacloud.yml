@@ -48,7 +48,6 @@ jobs:
           MINIO: ${{ secrets.MINIO }}
         run: |
           echo "$MINIO" > minio.env
-          cp minio.tf.disabled minio.tf
       - name: Install ospurge
         run: pip3 install git+https://git.openstack.org/openstack/ospurge
       - name: Initialization
@@ -91,7 +90,6 @@ jobs:
           MINIO: ${{ secrets.MINIO }}
         run: |
           echo "$MINIO" > minio.env
-          cp minio.tf.disabled minio.tf
       - name: Initialization
         run: make ENVIRONMENT=default init
         working-directory: ./terraform
