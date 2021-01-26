@@ -94,5 +94,5 @@ jobs:
         run: make ENVIRONMENT=default init
         working-directory: ./terraform
       - name: Deploy environment
-        run: make ENVIRONMENT=default create"
+        run: make ENVIRONMENT=default create
         working-directory: ./terraform
