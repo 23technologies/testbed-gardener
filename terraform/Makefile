@@ -49,9 +49,9 @@ clean: init
 	@rm -f .deploy.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
 	@rm -f .id_rsa.$(ENVIRONMENT)
 
-	if [[ ! $$ENVIRONMENT != default ]]; \
-	  @terraform workspace select default; \
-	  @terraform workspace delete $(ENVIRONMENT); \
+	#if [[ $$ENVIRONMENT != default ]]; \
+	  terraform workspace select default; \
+	  terraform workspace delete $(ENVIRONMENT); \
 	fi
 
 purge:
@@ -64,12 +64,12 @@ purge:
 	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
 	@rm -f .deploy.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
 	@rm -f .id_rsa.$(ENVIRONMENT)
-	@openstack keypair delete garden-cluster-$(ENVIRONMENT)
+	@openstack keypair delete garden-cluster-$(ENVIRONMENT) || true
 	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
 
-	if [[ ! $$ENVIRONMENT != default ]]; \
-	  @terraform workspace select default; \
-	  @terraform workspace delete force $(ENVIRONMENT); \
+	@if [[ $$ENVIRONMENT != default ]]; then \
+	  terraform workspace select default; \
+	  terraform workspace delete force $(ENVIRONMENT); \
 	fi
 
 purge-ssh-keys:
