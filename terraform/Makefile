@@ -67,7 +67,8 @@ purge:
 	@openstack keypair delete garden-cluster-$(ENVIRONMENT) || true
 	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
 
-	@if [[ $$ENVIRONMENT != default ]]; then \
+	if [[ $(ENVIRONMENT) != default ]]; \
+	then \
 	  terraform workspace select default; \
 	  terraform workspace delete force $(ENVIRONMENT); \
 	fi
