@@ -1,5 +1,8 @@
 # Makefile
 
+# NOTE: this is a workaround for the moment, remove bashism in the future
+SHELL := /bin/bash
+
 CONSOLE = mgmt
 ENVIRONMENT = default
 OPENSTACK = openstack
