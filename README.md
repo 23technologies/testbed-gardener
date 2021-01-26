@@ -17,7 +17,6 @@ A documentation with the individual steps can be found in the repository
 * Terraform must be installed (https://learn.hashicorp.com/tutorials/terraform/install-cli)
 * ``terraform/clouds.yaml`` and ``terraform/secure.yaml`` files must be created
   (https://docs.openstack.org/python-openstackclient/latest/configuration/index.html#clouds-yaml)
-* ``terraform/files/gx-scs/credentials.yaml`` file must be created
 * ospurge is required for project-cleanup (be careful):
 ``python3 -m pip install git+https://git.openstack.org/openstack/ospurge``
 
@@ -26,10 +25,12 @@ A documentation with the individual steps can be found in the repository
 **Before use, make sure that no other testbed is already in the project.**
 
 ### Build up Gardener
+
 * ``make create``
 * ``make deploy`` (or: ``make login`` followed by ``bash deploy.sh``)
 
 ### Teardown Gardener
+
 * Delete all Clusters inside gardener (via the dashboard or the API)
 * ``make login`` and ``sow burndown -A`` in folder ``landscape``
 * ``make clean``

@@ -1,5 +1,5 @@
 variable "cloud_provider" {
-  default = "gx-scs"
+  default = "betacloud"
   type    = string
 }
 
