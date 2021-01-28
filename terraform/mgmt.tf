@@ -63,7 +63,7 @@ EOT
   }
 
   provisioner "local-exec" {
-    command = "while [[ $(nc -w 1 $MGMT 22 > /dev/null; echo $?) -ne 0 ]]; do sleep 1; echo waiting...; done"
+    command = "while [ $(nc -w 1 $MGMT 22 > /dev/null; echo $?) -ne 0 ]; do sleep 1; echo waiting...; done"
     environment = {
       MGMT = openstack_networking_floatingip_v2.mgmt_floating_ip.address
     }
