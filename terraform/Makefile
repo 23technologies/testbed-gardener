@@ -7,6 +7,7 @@ CONSOLE = mgmt
 ENVIRONMENT = standard
 OPENSTACK = openstack
 USERNAME = ubuntu
+TF_LOG = TRACE
 
 RESOURCE = openstack_networking_floatingip_v2.main_floating_ip
 STATE = errored.tfstate
