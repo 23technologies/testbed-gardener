@@ -56,7 +56,7 @@ jobs:
         run: make init
         working-directory: ./terraform
       - name: Remove existing environment
-        run: yes | make ENVIRONMENT=default purge || exit 0
+        run: yes | make ENVIRONMENT=standard purge || exit 0
         working-directory: ./terraform
 
   daily-betacloud-deploy:
@@ -98,8 +98,8 @@ jobs:
         run: |
           echo "$MINIO" > minio.env
       - name: Initialization
-        run: make ENVIRONMENT=default init
+        run: make ENVIRONMENT=standard init
         working-directory: ./terraform
       - name: Deploy environment
-        run: make ENVIRONMENT=default create
+        run: make ENVIRONMENT=standard create
         working-directory: ./terraform
