@@ -62,6 +62,14 @@ EOT
     user        = var.ssh_username
   }
 
+  provisioner "local-exec" {
+    command = "while [[ $(nc -w 1 $MGMT 22 > /dev/null; echo $?) -ne 0 ]]; do sleep 1; echo waiting...; done"
+    environment = {
+      MGMT = openstack_networking_floatingip_v2.mgmt_floating_ip.address
+    }
+
+  }
+
   provisioner "file" {
     content     = openstack_compute_keypair_v2.key.private_key
     destination = "/home/${var.ssh_username}/.ssh/id_rsa"
