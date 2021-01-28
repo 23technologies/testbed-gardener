@@ -4,7 +4,7 @@
 SHELL := /bin/bash
 
 CONSOLE = mgmt
-ENVIRONMENT = default
+ENVIRONMENT = standard
 OPENSTACK = openstack
 USERNAME = ubuntu
 
@@ -48,11 +48,8 @@ clean: init
 	@terraform destroy -auto-approve -var-file="environment-$(ENVIRONMENT).tfvars" $(PARAMS)
 	@rm -f .deploy.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
 	@rm -f .id_rsa.$(ENVIRONMENT)
-
-	#if [[ $$ENVIRONMENT != default ]]; \
-	  terraform workspace select default; \
-	  terraform workspace delete $(ENVIRONMENT); \
-	fi
+	@terraform workspace select default
+	@terraform workspace delete $(ENVIRONMENT)
 
 purge:
 	@echo "Warning, going to delete ALL resources in $(ENVIRONMENT), even those that have not been created by the testbed."
@@ -64,14 +61,11 @@ purge:
 	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
 	@rm -f .deploy.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
 	@rm -f .id_rsa.$(ENVIRONMENT)
+	@terraform workspace select default 
+	@terraform workspace delete -force $(ENVIRONMENT) || true
 	@openstack keypair delete garden-cluster-$(ENVIRONMENT) || true
 	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
 
-	if [[ $(ENVIRONMENT) != default ]]; \
-	then \
-	  terraform workspace select default; \
-	  terraform workspace delete force $(ENVIRONMENT); \
-	fi
 
 purge-ssh-keys:
 	for i in `openstack --os-cloud $(ENVIROMENT) keypair list -c Name -f value`; do openstack keypair delete $$i; done
