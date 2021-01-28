@@ -69,6 +69,26 @@ EOT
     }
 
   }
+  provisioner "file" {
+    content     = "t"
+    destination = "/home/${var.ssh_username}/smallfile1"
+  }
+  provisioner "file" {
+    content     = "t"
+    destination = "/home/${var.ssh_username}/smallfile2"
+  }
+  provisioner "file" {
+    content     = "t"
+    destination = "/home/${var.ssh_username}/smallfile3"
+  }
+  provisioner "file" {
+    content     = "t"
+    destination = "/home/${var.ssh_username}/smallfile4"
+  }
+  provisioner "file" {
+    content     = "t"
+    destination = "/home/${var.ssh_username}/smallfile5"
+  }
 
   provisioner "file" {
     content     = openstack_compute_keypair_v2.key.private_key
