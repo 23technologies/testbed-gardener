@@ -50,8 +50,8 @@ jobs:
           echo "$MINIO" > minio.env
       - name: Install ospurge
         run: pip3 install git+https://git.openstack.org/openstack/ospurge
-      - name: Install openstack client
-        run: pip3 install python-openstackclient
+      - name: Install requirements
+        run: pip3 install -r requirements.txt
       - name: Initialization
         run: make init
         working-directory: ./terraform
