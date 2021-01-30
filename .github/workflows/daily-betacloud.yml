@@ -71,6 +71,10 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: 0.14.2
+      - name: Setup Terragrunt
+        uses: autero1/action-terragrunt@v1.0.0
+        with:
+          terragrunt_version: 0.27.3
       - name: Display IP
         shell: bash
         working-directory: ./terraform
@@ -98,8 +102,8 @@ jobs:
         run: |
           echo "$MINIO" > minio.env
       - name: Initialization
-        run: make ENVIRONMENT=standard init
+        run: make ENVIRONMENT=standard TERRAFORM=terragrunt init
         working-directory: ./terraform
       - name: Deploy environment
-        run: make ENVIRONMENT=standard create
+        run: make ENVIRONMENT=standard TERRAFORM=terragrunt create
         working-directory: ./terraform
