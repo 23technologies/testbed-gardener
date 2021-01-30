@@ -3,20 +3,9 @@ output "mgmt_address" {
   sensitive = false
 }
 
-output "private_key" {
-  value     = openstack_compute_keypair_v2.key.private_key
-  sensitive = true
-}
-
 output "gardener_password" {
   value     = random_password.gardener_password.result
   sensitive = false
-}
-
-resource "local_file" "id_rsa" {
-  filename          = ".id_rsa.${var.cloud_provider}"
-  file_permission   = "0600"
-  sensitive_content = openstack_compute_keypair_v2.key.private_key
 }
 
 resource "local_file" "MGMT_ADDRESS" {
