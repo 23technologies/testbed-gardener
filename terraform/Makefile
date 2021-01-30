@@ -5,8 +5,10 @@ SHELL := /bin/bash
 
 CONSOLE = mgmt
 ENVIRONMENT = standard
-OPENSTACK = openstack
 USERNAME = ubuntu
+
+OPENSTACK = openstack
+TERRAFORM = terraform
 
 RESOURCE = openstack_networking_floatingip_v2.main_floating_ip
 STATE = errored.tfstate
@@ -21,35 +23,35 @@ ifneq (,$(wildcard ./minio.env))
 endif
 
 init:
-	@if [ ! -d .terraform/plugins ]; then terraform init; fi
+	@if [ ! -d .terraform/plugins ]; then $(TERRAFORM) init; fi
 
-	@terraform workspace select ${ENVIRONMENT} || terraform workspace new ${ENVIRONMENT}
+	@$(TERRAFORM) workspace select ${ENVIRONMENT} || $(TERRAFORM) workspace new ${ENVIRONMENT}
 
 attach: init
-	@terraform import -var-file="environments/$(ENVIRONMENT).tfvars" $(RESOURCE) $(PARAMS)
+	@$(TERRAFORM) import -var-file="environments/$(ENVIRONMENT).tfvars" $(RESOURCE) $(PARAMS)
 
 detach: init
-	@terraform state rm $(RESOURCE) $(PARAMS)
+	@$(TERRAFORM) state rm $(RESOURCE) $(PARAMS)
 
 state-push: init
-	@terraform state push $(STATE)
+	@$(TERRAFORM) state push $(STATE)
 
 dry-run: init
-	@terraform plan -var-file="environments/$(ENVIRONMENT).tfvars" $(PARAMS)
+	@$(TERRAFORM) plan -var-file="environments/$(ENVIRONMENT).tfvars" $(PARAMS)
 
 create: init
 	@touch .deploy.$(ENVIRONMENT)
-	@terraform apply -auto-approve -var-file="environments/$(ENVIRONMENT).tfvars"
+	@$(TERRAFORM) apply -auto-approve -var-file="environments/$(ENVIRONMENT).tfvars"
 
 show: init
-	@terraform show
+	@$(TERRAFORM) show
 
 clean: init
-	@terraform destroy -auto-approve -var-file="environments/$(ENVIRONMENT).tfvars" $(PARAMS)
+	@$(TERRAFORM) destroy -auto-approve -var-file="environments/$(ENVIRONMENT).tfvars" $(PARAMS)
 	@rm -f .deploy.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
 	@rm -f .id_rsa.$(ENVIRONMENT)
-	@terraform workspace select default
-	@terraform workspace delete $(ENVIRONMENT)
+	@$(TERRAFORM) workspace select default
+	@$(TERRAFORM) workspace delete $(ENVIRONMENT)
 
 purge:
 	@echo "Warning, going to delete ALL resources in $(ENVIRONMENT), even those that have not been created by the testbed."
@@ -61,8 +63,8 @@ purge:
 	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
 	@rm -f .deploy.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
 	@rm -f .id_rsa.$(ENVIRONMENT)
-	@terraform workspace select default 
-	@terraform workspace delete -force $(ENVIRONMENT) || true
+	@$(TERRAFORM) workspace select default 
+	@$(TERRAFORM) workspace delete -force $(ENVIRONMENT) || true
 	@openstack keypair delete garden-cluster-$(ENVIRONMENT) || true
 	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
 
@@ -71,7 +73,7 @@ purge-ssh-keys:
 	for i in `openstack --os-cloud $(ENVIROMENT) keypair list -c Name -f value`; do openstack keypair delete $$i; done
 
 list: init
-	@terraform state list
+	@$(TERRAFORM) state list
 
 ssh: .MGMT_ADDRESS.$(ENVIRONMENT) .id_rsa.$(ENVIRONMENT)
 	@source ./.MGMT_ADDRESS.$(ENVIRONMENT); \
@@ -89,15 +91,15 @@ console: .deploy.$(ENVIRONMENT)
 	@$(OPENSTACK) console log show garden-cluster-$(CONSOLE)
 
 .deploy.$(ENVIRONMENT): init
-	@STAT=$$(terraform state list); \
+	@STAT=$$($(TERRAFORM) state list); \
 	if test -n "$$STAT"; then touch .deploy.$(ENVIRONMENT); else echo "use make deploy"; exit 1; fi
 
 .MGMT_ADDRESS.$(ENVIRONMENT): .deploy.$(ENVIRONMENT)
-	@MGMT_ADDRESS=$$(terraform output mgmt_address); \
+	@MGMT_ADDRESS=$$($(TERRAFORM) output mgmt_address); \
 	echo "MGMT_ADDRESS=$$MGMT_ADDRESS" > $@;
 
 .id_rsa.$(ENVIRONMENT): .deploy.$(ENVIRONMENT)
-	@PRIVATE_KEY=$$(terraform output private_key); \
+	@PRIVATE_KEY=$$($(TERRAFORM) output private_key); \
 	echo "$$PRIVATE_KEY" > $@; \
         chmod 0600 $@
 
