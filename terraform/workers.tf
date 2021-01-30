@@ -25,7 +25,8 @@ resource "openstack_compute_instance_v2" "worker" {
 #cloud-config
 package_update: true
 package_upgrade: true
-final_message: "The system is finally up, after $UPTIME seconds"
+groups:
+  - docker: [${var.ssh_username}]
 power_state:
   mode: reboot
   condition: True
@@ -38,10 +39,9 @@ write_files:
 runcmd:
   - mkdir /etc/docker
   - mv /tmp/daemon.json /etc/docker/daemon.json
-  - groupadd docker
-  - usermod -aG docker ${var.ssh_username}
   - apt -y install docker.io
   - systemctl enable docker --now
+final_message: "The system is finally up, after $UPTIME seconds"
 EOT
 
 }

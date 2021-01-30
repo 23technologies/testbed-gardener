@@ -42,6 +42,8 @@ resource "openstack_compute_instance_v2" "mgmt_server" {
 #cloud-config
 package_update: true
 package_upgrade: true
+groups:
+  - docker: [${var.ssh_username}]
 write_files:
   - encoding: b64
     content: ewogICJtdHUiOiAxNDAwCn0K # set mtu 1400
@@ -51,9 +53,8 @@ write_files:
 runcmd:
   - mkdir /etc/docker
   - mv /tmp/daemon.json /etc/docker/daemon.json
-  - groupadd docker
-  - usermod -aG docker ${var.ssh_username}
   - apt -y install docker.io
+final_message: "The system is finally up, after $UPTIME seconds"
 EOT
 
   connection {
