@@ -29,11 +29,11 @@ power_state:
   mode: reboot
   condition: True
 write_files:
-- encoding: b64
-  content: ewogICJtdHUiOiAxNDAwCn0K # set mtu 1400
-  owner: root:root
-  path: /tmp/daemon.json
-  permissions: '0644'
+  - encoding: b64
+    content: ewogICJtdHUiOiAxNDAwCn0K # set mtu 1400
+    owner: root:root
+    path: /tmp/daemon.json
+    permissions: '0644'
 runcmd:
   - mkdir /etc/docker
   - mv /tmp/daemon.json /etc/docker/daemon.json

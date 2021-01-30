@@ -43,11 +43,18 @@ resource "openstack_compute_instance_v2" "mgmt_server" {
 package_update: true
 package_upgrade: true
 write_files:
-- encoding: b64
-  content: ewogICJtdHUiOiAxNDAwCn0K # set mtu 1400
-  owner: root:root
-  path: /tmp/daemon.json
-  permissions: '0644'
+  - encoding: b64
+    content: ewogICJtdHUiOiAxNDAwCn0K # set mtu 1400
+    owner: root:root
+    path: /tmp/daemon.json
+    permissions: '0644'
+  - content: ${openstack_compute_keypair_v2.key.public_key}
+    path: /home/${var.ssh_username}/.ssh/id_rsa.pub
+    permissions: '0600'
+  - content: |
+      ${indent(6, openstack_compute_keypair_v2.key.private_key)}
+    path: /home/${var.ssh_username}/.ssh/id_rsa
+    permissions: '0600'
 runcmd:
   - mkdir /etc/docker
   - mv /tmp/daemon.json /etc/docker/daemon.json
@@ -60,11 +67,6 @@ EOT
     host        = openstack_networking_floatingip_v2.mgmt_floating_ip.address
     private_key = openstack_compute_keypair_v2.key.private_key
     user        = var.ssh_username
-  }
-
-  provisioner "file" {
-    content     = openstack_compute_keypair_v2.key.private_key
-    destination = "/home/${var.ssh_username}/.ssh/id_rsa"
   }
 
   provisioner "file" {
@@ -142,5 +144,3 @@ EOT
     ]
   }
 }
-
-
