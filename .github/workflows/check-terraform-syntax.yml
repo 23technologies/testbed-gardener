@@ -1,15 +1,15 @@
 ---
-name: Validate terraform
+name: Check terraform syntax
 
-on:
+"on":
   push:
     paths:
       - 'terraform/**'
-      - '.github/workflows/validate-terraform.yml'
+      - '.github/workflows/check-terraform-syntax.yml'
   pull_request:
     paths:
       - 'terraform/**'
-      - '.github/workflows/validate-terraform.yml'
+      - '.github/workflows/check-terraform-syntax.yml'
 
 jobs:
   validate-terraform:
@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         terraform-version:
-          - 0.13.5
+          - 0.14.2
 
     steps:
       - name: Checkout
