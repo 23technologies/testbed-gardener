@@ -23,7 +23,7 @@ ifneq (,$(wildcard ./minio.env))
 endif
 
 init:
-	@if [ ! -d .terraform/plugins ]; then $(TERRAFORM) init; fi
+	@if [ ! -d .terraform/providers ]; then $(TERRAFORM) init; fi
 
 	@$(TERRAFORM) workspace select ${ENVIRONMENT} || $(TERRAFORM) workspace new ${ENVIRONMENT}
 
@@ -39,7 +39,7 @@ state-push: init
 dry-run: init
 	@$(TERRAFORM) plan -var-file="environments/$(ENVIRONMENT).tfvars" $(PARAMS)
 
-create: init
+create: init .id_rsa.$(ENVIRONMENT)
 	@touch .deploy.$(ENVIRONMENT)
 	@$(TERRAFORM) apply -auto-approve -var-file="environments/$(ENVIRONMENT).tfvars"
 
@@ -50,6 +50,7 @@ clean: init
 	@$(TERRAFORM) destroy -auto-approve -var-file="environments/$(ENVIRONMENT).tfvars" $(PARAMS)
 	@rm -f .deploy.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
 	@rm -f .id_rsa.$(ENVIRONMENT)
+	@rm -f .id_rsa.$(ENVIRONMENT).pub
 	@$(TERRAFORM) workspace select default
 	@$(TERRAFORM) workspace delete $(ENVIRONMENT)
 
@@ -98,10 +99,8 @@ console: .deploy.$(ENVIRONMENT)
 	@MGMT_ADDRESS=$$($(TERRAFORM) output mgmt_address); \
 	echo "MGMT_ADDRESS=$$MGMT_ADDRESS" > $@;
 
-.id_rsa.$(ENVIRONMENT): .deploy.$(ENVIRONMENT)
-	@PRIVATE_KEY=$$($(TERRAFORM) output private_key); \
-	echo "$$PRIVATE_KEY" > $@; \
-        chmod 0600 $@
+.id_rsa.$(ENVIRONMENT):
+	@ssh-keygen -f .id_rsa.$(ENVIRONMENT) -q -N ""
 
 watch: .id_rsa.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
 	@source ./.MGMT_ADDRESS.$(ENVIRONMENT); \

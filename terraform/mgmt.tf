@@ -48,13 +48,6 @@ write_files:
     owner: root:root
     path: /tmp/daemon.json
     permissions: '0644'
-  - content: ${openstack_compute_keypair_v2.key.public_key}
-    path: /home/${var.ssh_username}/.ssh/id_rsa.pub
-    permissions: '0600'
-  - content: |
-      ${indent(6, openstack_compute_keypair_v2.key.private_key)}
-    path: /home/${var.ssh_username}/.ssh/id_rsa
-    permissions: '0600'
 runcmd:
   - mkdir /etc/docker
   - mv /tmp/daemon.json /etc/docker/daemon.json
@@ -65,8 +58,13 @@ EOT
 
   connection {
     host        = openstack_networking_floatingip_v2.mgmt_floating_ip.address
-    private_key = openstack_compute_keypair_v2.key.private_key
+    private_key = file(".id_rsa.${var.cloud_provider}")
     user        = var.ssh_username
+  }
+
+  provisioner "file" {
+    content     = file(".id_rsa.${var.cloud_provider}")
+    destination = "/home/${var.ssh_username}/.ssh/id_rsa"
   }
 
   provisioner "file" {
