@@ -102,8 +102,8 @@ jobs:
         run: |
           echo "$MINIO" > minio.env
       - name: Initialization
-        run: make ENVIRONMENT=standard TERRAFORM=terragrunt init
+        run: make ENVIRONMENT=standard init
         working-directory: ./terraform
       - name: Deploy environment
-        run: make ENVIRONMENT=standard TERRAFORM=terragrunt create
+        run: make ENVIRONMENT=standard create
         working-directory: ./terraform
