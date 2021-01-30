@@ -22,7 +22,7 @@ jobs:
       - name: Setup terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 0.14.2
+          terraform_version: 0.14.5
       - name: Setup python
         uses: actions/setup-python@v2
         with:
@@ -70,7 +70,7 @@ jobs:
       - name: Setup terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: 0.14.2
+          terraform_version: 0.14.5
       - name: Setup Terragrunt
         uses: autero1/action-terragrunt@v1.0.0
         with:
