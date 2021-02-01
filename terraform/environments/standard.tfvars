@@ -13,4 +13,4 @@ network_management        = "gardener"                              # network pr
 public                    = "external"                              # public network name
 letsencrypt_mail          = "noreply@gardener-1.23technologies.xyz" # mailadress to register at letsencrypt
 letsencrypt_live          = false                                   # use staging or live environment
-backup_enabled            = "true"                                  # enables S3 backup
+backup_enabled            = "false"                                  # enables S3 backup
