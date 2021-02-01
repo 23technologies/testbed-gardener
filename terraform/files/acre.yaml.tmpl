@@ -51,7 +51,7 @@ landscape:
       mode: seed
       seedConfig:
         backup:
-          active: true
+          active: ${backup_enabled}
       region: ${clouds.region_name}
       zones:
         - ${availability_zone}
