@@ -1,5 +1,10 @@
-output "mgmt_address" {
-  value     = openstack_networking_floatingip_v2.mgmt_floating_ip.address
+output "gardener_login_url" {
+  value     = "https://gardener.ing.${var.dns_domain}"
+  sensitive = false
+}
+
+output "gardener_name" {
+  value     = "admin@${var.dns_domain}"
   sensitive = false
 }
 
