@@ -23,7 +23,7 @@ do
 	echo waiting for LoadBalancer
 	sleep 20
 done
-PW=$(kubectl get secret --namespace default keycloak-23t-env-vars -o jsonpath="{.data.KEYCLOAK_ADMIN_PASSWORD}" | base64 --decode)
+PW=$(kubectl get secret --namespace default keycloak-23t -o jsonpath="{.data.admin-password}" | base64 --decode)
 ISSUER="http://$(kubectl get service keycloak-23t -o jsonpath='{.status.loadBalancer.ingress[0].ip}')/auth/realms/$REALM"
 URL="https://$(kubectl get ingress -n garden gardener-dashboard-ingress -o=jsonpath='{.spec.rules[0].host}')/*"
 
