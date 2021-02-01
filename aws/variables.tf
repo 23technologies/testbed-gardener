@@ -13,10 +13,17 @@ variable "flavor_worker" {
   type    = string
 }
 
-variable "availability_zone" {
+variable "region" {
   default = "eu-central-1"
   type    = string
  }
+
+
+variable "availability_zone" {
+  default = "eu-central-1a"
+  type    = string
+ }
+
 
 variable "dns_domain" {
   default = "23technologies.xyz."
@@ -24,12 +31,18 @@ variable "dns_domain" {
 }
 
 variable "ssh_key" {
-  default = "~/.ssh/id_rsa.pub"
+  default = "~/.ssh/id_rsa"
   type    = string
 }
 
+variable "ssh_key_pub" {
+  default = null
+  type    = string
+}
+
+
 variable "cidr" {
-    default = "10.0.0.0/16"
+    default = "10.23.0.0/16"
     type = string
  }
 
