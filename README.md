@@ -2,17 +2,7 @@
 
 A virtual testbed environment for [Gardener](https://gardener.cloud).
 
-The necessary Kubernetes cluster for the seed is built with [K3s](https://k3s.io)
-on OpenStack instances previously provided by Terraform.
-
-A documentation with the individual steps can be found in the repository
-[gardener/garden-setup](https://github.com/gardener/garden-setup).
-
-## Limitations
-
-* Because of the missing S3 Terraform backend integration only a single testbed can be used in a project.
-
-## Preparations
+## Required software
 
 * Terraform must be installed (https://learn.hashicorp.com/tutorials/terraform/install-cli)
 * ``terraform/clouds.yaml`` and ``terraform/secure.yaml`` files must be created
@@ -20,17 +10,31 @@ A documentation with the individual steps can be found in the repository
 * ospurge is required for project-cleanup (be careful):
 ``python3 -m pip install git+https://git.openstack.org/openstack/ospurge``
 
-## Usage
+## Configuration
+All relevant steps happen in the folder terraform
 
-**Before use, make sure that no other testbed is already in the project.**
+Copy ``secure.yaml.sample`` to ``secure.yaml`` and ``clouds.yaml.sample`` to ``clouds.yaml``
+and fill in the correct credentials for your openstack-cloud.
 
-### Build up Gardener
+Adjust variables in environment/standard.tfvars to suit your needs.
 
-* ``make create``
-* ``make deploy`` (or: ``make login`` followed by ``bash deploy.sh``)
+## Build up Gardener
 
-### Teardown Gardener
+**make sure that no other testbed is already in the project.**
 
+``make create`` creates the testbed:
+
+1. creates all relevant openstack resources, networks, securitygroups, dns-zones, VMs
+2. creates kubernetes cluster with RKE on the VMs
+3. deploys gardener, the gardener dashboard and a gardener-seed in the cluster
+4. Installs keycloak and attaches it to gardener-dashboard
+
+At the end of a successful deployment, the URL, email and password for the login will be displayed.
+
+## Teardown Gardener
+#### Nice and slow
 * Delete all Clusters inside gardener (via the dashboard or the API)
-* ``make login`` and ``sow burndown -A`` in folder ``landscape``
+* ``make `` and ``sow burndown -A`` in folder ``landscape``
 * ``make clean``
+#### quick and rough
+``make purge``
