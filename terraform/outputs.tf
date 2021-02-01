@@ -1,14 +1,14 @@
-output "01_gardener_url" {
+output "gardener_login_url" {
   value     = "https://gardener.ing.${var.dns_domain}"
   sensitive = false
 }
 
-output "02_gardener_username" {
+output "gardener_name" {
   value     = "admin@${var.dns_domain}"
   sensitive = false
 }
 
-output "03_gardener_password" {
+output "gardener_password" {
   value     = random_password.gardener_password.result
   sensitive = false
 }
