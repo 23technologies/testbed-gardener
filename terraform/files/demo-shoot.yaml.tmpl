@@ -1,0 +1,54 @@
+kind: Shoot
+apiVersion: core.gardener.cloud/v1beta1
+metadata:
+  namespace: garden
+  name: demo-shoot
+spec:
+  provider:
+    type: openstack
+    infrastructureConfig:
+      apiVersion: openstack.provider.extensions.gardener.cloud/v1alpha1
+      kind: InfrastructureConfig
+      networks:
+        workers: 10.250.0.0/16
+      floatingPoolName: external
+    controlPlaneConfig:
+      apiVersion: openstack.provider.extensions.gardener.cloud/v1alpha1
+      kind: ControlPlaneConfig
+      loadBalancerProvider: amphora
+      zone: ${availability_zone}
+    workers:
+      - name: worker-e2zuq
+        minimum: 1
+        maximum: 2
+        maxSurge: 1
+        machine:
+          type: ${flavor_worker}
+          image:
+            name: ubuntu
+            version: 20.4.20201016
+        zones:
+          - ${availability_zone}
+  networking:
+    type: calico
+    nodes: 10.250.0.0/16
+  cloudProfileName: openstack
+  secretBindingName: garden-openstack-openstack
+  region: ${clouds.region_name}
+  purpose: production
+  kubernetes:
+    version: 1.19.4
+  addons:
+    kubernetesDashboard:
+      enabled: false
+    nginxIngress:
+      enabled: false
+  maintenance:
+    timeWindow:
+      begin: 040000+0000
+      end: 050000+0000
+    autoUpdate:
+      kubernetesVersion: true
+      machineImageVersion: true
+  hibernation:
+    schedules: []

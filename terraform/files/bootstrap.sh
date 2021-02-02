@@ -62,4 +62,5 @@ sudo snap install yq
 bash deploy.sh
 bash patch_dashboard.sh
 bash install_keycloak.sh
+bash create_shoot.sh
 sudo shutdown -r

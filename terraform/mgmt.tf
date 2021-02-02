@@ -78,6 +78,11 @@ EOT
   }
 
   provisioner "file" {
+    content     = templatefile("files/demo-shoot.yaml.tmpl", { flavor_worker = var.flavor_worker, availability_zone = var.availability_zone, clouds = local.clouds })
+    destination = "/home/${var.ssh_username}/demo-shoot.yaml"
+  }
+
+  provisioner "file" {
     source      = "files/install_keycloak.sh"
     destination = "/home/${var.ssh_username}/install_keycloak.sh"
   }
@@ -130,6 +135,12 @@ EOT
     source      = "files/patch_dashboard.sh"
     destination = "/home/${var.ssh_username}/patch_dashboard.sh"
   }
+
+  provisioner "file" {
+    source      = "files/create_shoot.sh"
+    destination = "/home/${var.ssh_username}/create_shoot.sh"
+  }
+
 
   provisioner "remote-exec" {
     inline = [
