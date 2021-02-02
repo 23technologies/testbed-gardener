@@ -13,6 +13,10 @@ output "gardener_password" {
   sensitive = false
 }
 
+output "mgmt_address" {
+  value = openstack_networking_floatingip_v2.mgmt_floating_ip.address
+}
+
 resource "local_file" "MGMT_ADDRESS" {
   filename        = ".MGMT_ADDRESS.${var.cloud_provider}"
   file_permission = "0644"
