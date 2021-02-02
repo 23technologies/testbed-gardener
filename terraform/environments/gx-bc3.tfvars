@@ -1,0 +1,16 @@
+availability_zone         = "south-2"
+cloud_provider            = "gx-bc3"
+dns_domain                = "gardener-3.23technologies.xyz"
+flavor_main               = "4C-8GB-40GB"
+flavor_mgmt               = "2C-2GB-20GB"
+flavor_worker             = "8C-32GB-40GB"
+flavor_worker_cpu         = "4"
+flavor_worker_memory      = "16Gi"
+flavor_worker_disk        = "40Gi"
+image                     = "Ubuntu 20.04"
+network_availability_zone = "south-2"
+network_management        = "gardener"
+public                    = "external"
+letsencrypt_mail          = "muench@23technologies.cloud"
+letsencrypt_live          = false
+backup_enabled            = false
