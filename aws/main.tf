@@ -20,13 +20,14 @@ resource "aws_internet_gateway" "main" {
   }
 }
 
-resource "aws_route_table" "main" {
-  vpc_id = aws_vpc.main.id
+resource "aws_default_route_table" "main" {
+  #vpc_id = aws_vpc.main.id
+  default_route_table_id = aws_vpc.main.default_route_table_id
 
-#   route {
-#     cidr_block = "0.0.0.0/0"
-#     gateway_id = aws_internet_gateway.main.id
-#   }
+   route {
+     cidr_block = "0.0.0.0/0"
+     gateway_id = aws_internet_gateway.main.id
+   }
 
 
 #   route {
@@ -44,36 +45,59 @@ resource "aws_route_table" "main" {
   }
 }
 
-resource "aws_route_table_association" "gateway" {
-  gateway_id     = aws_internet_gateway.main.id
-  route_table_id = aws_route_table.main.id
-}
-
-resource "aws_main_route_table_association" "main_table" {
-  vpc_id         = aws_vpc.main.id
-  route_table_id = aws_route_table.main.id
-}
-
-
-resource "aws_subnet" "intern" {
+resource "aws_subnet" "intern1" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = cidrsubnet(var.cidr, 4, 1)
+  cidr_block = cidrsubnet(var.cidr, 8, 2)
   # ipv6_cidr_block = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 1)
-  availability_zone = var.availability_zone
+  availability_zone = "${var.region}a"
 
   tags = {
-    Name = "${var.prefix}-intern"
+    Name = "${var.prefix}-internA"
   }
 }
 
-resource "aws_route_table_association" "intern" {
-  subnet_id     = aws_subnet.intern.id
-  route_table_id = aws_route_table.main.id
+resource "aws_subnet" "intern2" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = cidrsubnet(var.cidr, 8, 3)
+  # ipv6_cidr_block = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 1)
+  availability_zone = "${var.region}b"
+
+  tags = {
+    Name = "${var.prefix}-internB"
+  }
 }
+
+resource "aws_subnet" "intern3" {
+  vpc_id     = aws_vpc.main.id
+  cidr_block = cidrsubnet(var.cidr, 8, 4)
+  # ipv6_cidr_block = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 1)
+  availability_zone = "${var.region}c"
+
+  tags = {
+    Name = "${var.prefix}-internC"
+  }
+}
+
+
+resource "aws_route_table_association" "intern1" {
+  subnet_id     = aws_subnet.intern1.id
+  route_table_id = aws_default_route_table.main.id
+}
+
+resource "aws_route_table_association" "intern2" {
+  subnet_id     = aws_subnet.intern2.id
+  route_table_id = aws_default_route_table.main.id
+}
+resource "aws_route_table_association" "intern3" {
+  subnet_id     = aws_subnet.intern3.id
+  route_table_id = aws_default_route_table.main.id
+}
+
+
 
 resource "aws_subnet" "extern" {
   vpc_id     = aws_vpc.main.id
-  cidr_block = cidrsubnet(var.cidr, 4, 2)
+  cidr_block = cidrsubnet(var.cidr, 8, 1)
   # ipv6_cidr_block = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 2)
   availability_zone = var.availability_zone
 
@@ -84,7 +108,7 @@ resource "aws_subnet" "extern" {
 
 resource "aws_route_table_association" "extern" {
   subnet_id     = aws_subnet.extern.id
-  route_table_id = aws_route_table.main.id
+  route_table_id = aws_default_route_table.main.id
 }
 
 locals {
@@ -110,8 +134,9 @@ module "kubernetes" {
 
   master_subnet_id = aws_subnet.extern.id
   worker_subnet_ids = [		
-      aws_subnet.extern.id
-#      aws_subnet.intern.id,
+      aws_subnet.intern1.id,
+      aws_subnet.intern2.id,
+      aws_subnet.intern3.id
   ]
   
   # Tags
