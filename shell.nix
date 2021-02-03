@@ -18,8 +18,10 @@ in pkgs.mkShell {
       kubectl
       kubernetes-helm
       minikube
+      openssh
       openvpn
       protobuf
+      python3
       screen
       terraform
       yaml2json
