@@ -2,7 +2,7 @@
 
 # versions
 
-VERSION_GARDENCTL=0.23.0
+VERSION_GARDENCTL=0.24.1
 VERSION_K9S=0.22.1
 VERSION_RKE=1.2.3
 
@@ -33,7 +33,7 @@ echo "alias k=kubectl" >> ~/.bashrc
 
 # install gardenctl
 
-sudo curl -L -o /usr/local/bin/gardenctl https://github.com/garden-cluster/gardenctl/releases/download/v"$VERSION_GARDENCTL"/gardenctl-linux-amd64
+sudo curl -L -o /usr/local/bin/gardenctl https://github.com/gardener/gardenctl/releases/download/v"$VERSION_GARDENCTL"/gardenctl-linux-amd64
 sudo chmod +x /usr/local/bin/gardenctl
 
 # install k9s
