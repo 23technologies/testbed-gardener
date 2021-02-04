@@ -63,4 +63,5 @@ bash deploy.sh
 bash patch_dashboard.sh
 bash install_keycloak.sh
 bash create_shoot.sh
+bash install_demo_app.sh
 sudo shutdown -r

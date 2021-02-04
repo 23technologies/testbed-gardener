@@ -141,6 +141,11 @@ EOT
     destination = "/home/${var.ssh_username}/create_shoot.sh"
   }
 
+  provisioner "file" {
+    source      = "files/install_demo_app.sh"
+    destination = "/home/${var.ssh_username}/install_demo_app.sh"
+  }
+
 
   provisioner "remote-exec" {
     inline = [
