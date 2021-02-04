@@ -67,6 +67,7 @@ purge:
 	@$(TERRAFORM) workspace select default 
 	@$(TERRAFORM) workspace delete -force $(ENVIRONMENT) || true
 	@openstack keypair delete garden-cluster-$(ENVIRONMENT) || true
+	@openstack keypair delete shoot--garden--demo-shoot || true
 	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
 
 
