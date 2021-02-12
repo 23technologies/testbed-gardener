@@ -2,6 +2,8 @@
 
 A virtual testbed environment for [Gardener](https://gardener.cloud).
 
+You can watch a asciinema-demo [here](https://asciinema.org/a/390554).
+
 ## Required software
 
 * Terraform must be installed (https://learn.hashicorp.com/tutorials/terraform/install-cli)
@@ -38,3 +40,4 @@ At the end of a successful deployment, the URL, email and password for the login
 * ``make clean``
 #### quick and rough
 ``make purge``
+
