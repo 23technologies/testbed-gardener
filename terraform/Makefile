@@ -4,7 +4,7 @@
 SHELL := /bin/bash
 
 CONSOLE = mgmt
-ENVIRONMENT = standard
+ENVIRONMENT = gx-scs-staging
 USERNAME = ubuntu
 
 OPENSTACK = openstack

@@ -1,0 +1,16 @@
+availability_zone         = "nova"                               # OpenStack availability zone
+cloud_provider            = "gx-cc"                              # has to be the same value as in the Makefile (environment) and in the clouds.yaml
+dns_domain                = "gardener-1.23technologies.xyz"         # domain for the gardener instace
+flavor_main               = "4C-16GB-50GB"                           # flavor for the garden-cluster kubernetes control-plane nodes
+flavor_mgmt               = "4C-16GB-50GB"                           # flavor for the installation and management server
+flavor_worker             = "4C-16GB-50GB"                          # flavor for the garden-cluster worker nodes, also used as default seed worker flavor
+flavor_worker_cpu         = "4"                                     # amount of cpus for the default worker flavor
+flavor_worker_memory      = "16Gi"                                  # amount of memory for the default worker flavor
+flavor_worker_disk        = "50Gi"                                  # disk capacity of the default worker flavor
+image                     = "Ubuntu 20.04 Focal Fossa 20200423"                          # default image for all servers
+network_availability_zone = "nova"                               # AZ for the network
+network_management        = "gardener"                              # network prefix for the mgmt server network
+public                    = "ext-net"                              # public network name
+letsencrypt_mail          = "noreply@gardener-1.23technologies.xyz" # mailadress to register at letsencrypt
+letsencrypt_live          = false                                   # use staging or live environment
+backup_enabled            = "false"                                  # enables S3 backup
