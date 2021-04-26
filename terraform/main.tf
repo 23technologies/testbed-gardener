@@ -1,18 +1,15 @@
+# - main -
 provider "openstack" {
   cloud = var.cloud_provider
 }
 
 terraform {
-  required_version = ">= 0.14"
+  required_version = ">= 0.13"
 
   required_providers {
     openstack = {
       source  = "terraform-provider-openstack/openstack"
-      version = "1.35.0"
-    }
-
-    random = {
-      source = "hashicorp/random"
+      version = "1.32.0"
     }
 
     local = {

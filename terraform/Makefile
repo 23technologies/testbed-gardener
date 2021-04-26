@@ -1,139 +1,137 @@
 # Makefile
 
-# NOTE: this is a workaround for the moment, remove bashism in the future
-SHELL := /bin/bash
-
-CONSOLE = mgmt
+# set the env we used 
+#ENVIRONMENT = gx-betacloud
+#ENVIRONMENT = gx-citycloud
+#ENVIRONMENT = gx-scs
 ENVIRONMENT = gx-scs-staging
-USERNAME = ubuntu
-
 OPENSTACK = openstack
-TERRAFORM = terraform
+USERNAME = ubuntu
+CONSOLE = capi-mgmtcluster
 
-RESOURCE = openstack_networking_floatingip_v2.main_floating_ip
-STATE = errored.tfstate
-
+# check for openstack credentials
 NEED_OSCLOUD := $(shell test -z "$$OS_PASSWORD" -a -z "$$OS_CLOUD" && echo 1 || echo 0)
 ifeq ($(NEED_OSCLOUD),1)
   export OS_CLOUD=$(ENVIRONMENT)
 endif
 
+# if enabled, use s3 for remote terraform state
 ifneq (,$(wildcard ./minio.env))
   include minio.env
 endif
 
 init:
-	@if [ ! -d .terraform/providers ]; then $(TERRAFORM) init; fi
-
-	@$(TERRAFORM) workspace select ${ENVIRONMENT} || $(TERRAFORM) workspace new ${ENVIRONMENT}
+	@if [ ! -d .terraform/plugins ]; then terraform init; fi
+	@terraform workspace select ${ENVIRONMENT} || terraform workspace new ${ENVIRONMENT}
 
 attach: init
-	@$(TERRAFORM) import -var-file="environments/$(ENVIRONMENT).tfvars" $(RESOURCE) $(PARAMS)
+	@terraform import -var-file="environments/environment-$(ENVIRONMENT).tfvars" $(RESOURCE) $(PARAMS)
 
 detach: init
-	@$(TERRAFORM) state rm $(RESOURCE) $(PARAMS)
+	@terraform state rm $(RESOURCE) $(PARAMS)
 
 state-push: init
-	@$(TERRAFORM) state push $(STATE)
+	@terraform state push $(STATE)
 
 dry-run: init
-	@$(TERRAFORM) plan -var-file="environments/$(ENVIRONMENT).tfvars" $(PARAMS)
+	@terraform plan -var-file="environments/environment-$(ENVIRONMENT).tfvars" $(PARAMS)
 
-create: init .id_rsa.$(ENVIRONMENT)
+create: init
 	@touch .deploy.$(ENVIRONMENT)
-	@$(TERRAFORM) apply -auto-approve -var-file="environments/$(ENVIRONMENT).tfvars"
+	@terraform apply -auto-approve -var-file="environments/environment-$(ENVIRONMENT).tfvars"
 
 show: init
-	@$(TERRAFORM) show
+	@terraform show
 
 clean: init
-	@$(TERRAFORM) destroy -auto-approve -var-file="environments/$(ENVIRONMENT).tfvars" $(PARAMS)
-	@rm -f .deploy.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
-	@rm -f .id_rsa.$(ENVIRONMENT)
-	@rm -f .id_rsa.$(ENVIRONMENT).pub
-	@$(TERRAFORM) workspace select default
-	@$(TERRAFORM) workspace delete $(ENVIRONMENT)
+	@terraform destroy -auto-approve -var-file="environments/environment-$(ENVIRONMENT).tfvars" $(PARAMS)
+	@terraform workspace select default
+	@terraform workspace delete $(ENVIRONMENT)
+	@rm -f .deploy.$(ENVIRONMENT) .deploy.MGMTCLUSTER_ADDRESS.$(ENVIRONMENT) .deploy.id_rsa.$(ENVIRONMENT)
 
 purge:
-	@echo "Warning, going to delete ALL resources in $(ENVIRONMENT), even those that have not been created by the testbed."
+	@echo "Warning, going to delete ALL resources in $(ENVIRONMENT), even those that have not been created by the testbed. The SSH-Key capi-keypair will be removed for all projects."
 	@read -p "Continue? (y/n) " -r; \
         if [[ ! $$REPLY =~ ^[Yy] ]]; \
         then \
 			exit 1; \
         fi
-	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
+	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose || true
 	@rm -f .deploy.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
 	@rm -f .id_rsa.$(ENVIRONMENT)
-	@$(TERRAFORM) workspace select default 
-	@$(TERRAFORM) workspace delete -force $(ENVIRONMENT) || true
-	@openstack keypair delete garden-cluster-$(ENVIRONMENT) || true
-	@openstack keypair delete shoot--garden--demo-shoot || true
-	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose
-
-
-purge-ssh-keys:
-	for i in `openstack --os-cloud $(ENVIROMENT) keypair list -c Name -f value`; do openstack keypair delete $$i; done
+	@terraform workspace select default || true
+	@terraform workspace delete -force $(ENVIRONMENT) || true
+	@openstack keypair delete capi-keypair || true
+	@ospurge --purge-own-project --os-cloud $(ENVIRONMENT) --verbose || true
 
 list: init
-	@$(TERRAFORM) state list
+	@terraform state list
 
-ssh: .MGMT_ADDRESS.$(ENVIRONMENT) .id_rsa.$(ENVIRONMENT)
-	@source ./.MGMT_ADDRESS.$(ENVIRONMENT); \
-	ssh -o StrictHostKeyChecking=no -o IdentitiesOnly=yes -i .id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMT_ADDRESS
+ssh:    .deploy.MGMTCLUSTER_ADDRESS.$(ENVIRONMENT) .deploy.id_rsa.$(ENVIRONMENT)
+	@source ./.deploy.MGMTCLUSTER_ADDRESS.$(ENVIRONMENT); \
+	ssh -o StrictHostKeyChecking=no -i .deploy.id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMTCLUSTER_ADDRESS
 
-deploy: .MGMT_ADDRESS.$(ENVIRONMENT) .id_rsa.$(ENVIRONMENT)
-	@source ./.MGMT_ADDRESS.$(ENVIRONMENT); \
-	ssh -o StrictHostKeyChecking=no -i .id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMT_ADDRESS "bash deploy.sh"
+login: ssh
 
-sshuttle: .MGMT_ADDRESS.$(ENVIRONMENT) .id_rsa.$(ENVIRONMENT)
-	@source ./.MGMT_ADDRESS.$(ENVIRONMENT); \
-	sshuttle --ssh-cmd "ssh -o StrictHostKeyChecking=no -i .id_rsa.$(ENVIRONMENT) " -r $(USERNAME)@$$MGMT_ADDRESS 10.40.0.0/16
+deploy: .deploy.MGMTCLUSTER_ADDRESS.$(ENVIRONMENT) .deploy.id_rsa.$(ENVIRONMENT)
+	@source ./.deploy.MGMTCLUSTER_ADDRESS.$(ENVIRONMENT); \
+	ssh -o StrictHostKeyChecking=no -i .deploy.id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMTCLUSTER_ADDRESS "bash deploy.sh"
 
-console: .deploy.$(ENVIRONMENT)
-	@$(OPENSTACK) console log show garden-cluster-$(CONSOLE)
+log:    .deploy.$(ENVIRONMENT)
+	@$(OPENSTACK) console log show $(CONSOLE)
+
+console:   .deploy.$(ENVIRONMENT)
+	@xdg-open $$( $(OPENSTACK) console url show $(CONSOLE) -f value -c url )
 
 .deploy.$(ENVIRONMENT): init
-	@STAT=$$($(TERRAFORM) state list); \
-	if test -n "$$STAT"; then touch .deploy.$(ENVIRONMENT); else echo "use make deploy"; exit 1; fi
+	@STAT=$$(terraform state list); \
+	if test -n "$$STAT"; then touch .deploy.$(ENVIRONMENT); else echo 'please, use "make create"'; exit 1; fi
 
-.MGMT_ADDRESS.$(ENVIRONMENT): .deploy.$(ENVIRONMENT)
-	@MGMT_ADDRESS=$$($(TERRAFORM) output mgmt_address); \
-	echo "MGMT_ADDRESS=$$MGMT_ADDRESS" > $@;
+.deploy.MGMTCLUSTER_ADDRESS.$(ENVIRONMENT): .deploy.$(ENVIRONMENT)
+	@MGMTCLUSTER_ADDRESS=$$(terraform output mgmtcluster_address); \
+	echo "MGMTCLUSTER_ADDRESS=$$MGMTCLUSTER_ADDRESS" > $@;
 
-.id_rsa.$(ENVIRONMENT):
-	@ssh-keygen -f .id_rsa.$(ENVIRONMENT) -q -N ""
+.deploy.id_rsa.$(ENVIRONMENT): .deploy.$(ENVIRONMENT)
+	@PRIVATE_KEY=$$(terraform output private_key); \
+	echo "$$PRIVATE_KEY" > $@; \
+        chmod 0600 $@
 
-watch: .id_rsa.$(ENVIRONMENT) .MGMT_ADDRESS.$(ENVIRONMENT)
-	@source ./.MGMT_ADDRESS.$(ENVIRONMENT); \
+watch: .deploy.id_rsa.$(ENVIRONMENT) .deploy.MGMTCLUSTER_ADDRESS.$(ENVIRONMENT)
+	@source ./.deploy.MGMTCLUSTER_ADDRESS.$(ENVIRONMENT); \
 	DISP=0; \
 	if test "$$COLORTERM" = "1"; then \
-	  GREEN=$$(echo -e "\e[0;32m"); GREENBOLD=$$(echo -e "\e[1;32m"); BOLD=$$(echo -e "\e[0;1m"); RED=$$(echo -e "\e[0;31m"); YELLOW=$$(echo -e "\e[0;33m"); NORM=$$(echo -e "\e[0;0m"); \
+	  GREEN=$$(echo -e "\e[0;32m"); \
+	  GREENBOLD=$$(echo -e "\e[1;32m"); \
+	  BOLD=$$(echo -e "\e[0;1m"); \
+	  RED=$$(echo -e "\e[0;31m"); \
+	  YELLOW=$$(echo -e "\e[0;33m"); \
+	  NORM=$$(echo -e "\e[0;0m"); \
 	fi; \
 	while true; do \
-		LEN=$$(ssh -o StrictHostKeyChecking=no -i .id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMT_ADDRESS sudo wc -l /var/log/cloud-init-output.log 2>/dev/null); \
+		LEN=$$(ssh -o StrictHostKeyChecking=no -i .deploy.id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMTCLUSTER_ADDRESS sudo wc -l /var/log/cloud-init-output.log 2>/dev/null); \
 		LEN=$${LEN%% *}; \
 		if test -n "$$LEN" -a "$$LEN" != "$$DISP"; then \
-		  OUT=$$(ssh -o StrictHostKeyChecking=no -i .id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMT_ADDRESS sudo tail -n $$((LEN-DISP)) /var/log/cloud-init-output.log 2>/dev/null); \
-		  echo -e "$$OUT" | sed -e "s/^\(TASK.*\)$$/$$BOLD\1$$NORM/" -e "s/^\(PLAY.*\)$$/$$GREEN\1$$NORM/" -e "s/^\(The system is finally up.*\)$$/$$GREENBOLD\1$$NORM/" -e "s/\(FAILED\)/$$RED\1$$NORM/g" -e "s/\(failed=[1-9][0-9]*\|unreachable=[1-9][0-9]*\)/$$RED\1$$NORM/g" -e "s/\(warn\|WARN\|RETRYING\)/$$YELLOW\1$$NORM/" -e "s/\(ok:\|ok=[0-9]*\)/$$GREEN\1$$NORM/"; \
+		  OUT=$$(ssh -o StrictHostKeyChecking=no -i .deploy.id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMTCLUSTER_ADDRESS sudo tail -n $$((LEN-DISP)) /var/log/cloud-init-output.log 2>/dev/null); \
+		  echo -e "$$OUT" | \
+		    sed -e "s/^\(TASK.*\)$$/$$BOLD\1$$NORM/" \
+		        -e "s/^\(PLAY.*\)$$/$$GREEN\1$$NORM/" \
+			-e "s/^\(The system is finally up.*\)$$/$$GREENBOLD\1$$NORM/" \
+			-e "s/\(FAILED\)/$$RED\1$$NORM/g" \
+			-e "s/\(failed=[1-9][0-9]*\|unreachable=[1-9][0-9]*\)/$$RED\1$$NORM/g" \
+			-e "s/\(warn\|WARN\|RETRYING\)/$$YELLOW\1$$NORM/" \
+			-e "s/\(ok:\|ok=[0-9]*\)/$$GREEN\1$$NORM/"; \
 		  if echo "$$OUT" | grep '^The system is finally up' >/dev/null 2>&1; then break; fi; \
 		  DISP=$$LEN; \
 		  sleep 5; \
 		fi; \
 	done;
-	#@$(OPENSTACK) server list
 
 openstack: init
 	@$(OPENSTACK)
 
-dashboard: .MGMT_ADDRESS.$(ENVIRONMENT) .id_rsa.$(ENVIRONMENT)
-	@source ./.MGMT_ADDRESS.$(ENVIRONMENT); \
-	ssh -o StrictHostKeyChecking=no -i .id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMT_ADDRESS "pkill -f 'kubectl proxy'"; \
-	ssh -o StrictHostKeyChecking=no -i .id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMT_ADDRESS "kubectl -n kubernetes-dashboard describe secret"; \
-	echo http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy; \
-	ssh -L 8001:localhost:8001 -o StrictHostKeyChecking=no -i .id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMT_ADDRESS "kubectl proxy"
+k9s: .deploy.MGMTCLUSTER_ADDRESS.$(ENVIRONMENT) .deploy.id_rsa.$(ENVIRONMENT)
+	@source ./.deploy.MGMTCLUSTER_ADDRESS.$(ENVIRONMENT); \
+	ssh -t -o StrictHostKeyChecking=no -i .deploy.id_rsa.$(ENVIRONMENT) $(USERNAME)@$$MGMTCLUSTER_ADDRESS \
+	"KUBECONFIG=/etc/rancher/k3s/k3s.yaml:/home/ubuntu/workload-cluster.yaml k9s --all-namespaces"
 
-login: ssh
-log: console
-tunnel: sshuttle
-
-PHONY: clean purge console attach detach sshuttle ssh dry-run list deploy watch openstack create log login dashboard 
+PHONY: clean console attach detach ssh dry-run list deploy watch openstack create log console login k9s 
