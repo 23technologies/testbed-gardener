@@ -54,6 +54,7 @@ echo "Waiting for "
 wget https://gx-scs.okeanos.dev --quiet -O /dev/null
 kubectl wait --timeout=10m --for=condition=certificatesavailable kubeadmcontrolplanes --selector=cluster.x-k8s.io/cluster-name=${CLUSTER_NAME}
 kubectl wait --timeout=5m --for=condition=certificatesavailable kubeadmcontrolplanes --selector=cluster.x-k8s.io/cluster-name=${CLUSTER_NAME}
+kubectl wait --timeout=30m cluster ${CLUSTER_NAME} --for=condition=Ready
 
 kubectl get secrets ${CLUSTER_NAME}-kubeconfig --output go-template='{{ .data.value | base64decode }}' > ${KUBECONFIG_WORKLOADCLUSTER}
 export KUBECONFIG=.kube/config:${KUBECONFIG_WORKLOADCLUSTER}
