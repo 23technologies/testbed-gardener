@@ -90,6 +90,11 @@ EOF
   }
 
   provisioner "file" {
+    source      = "files/sow_deploy.sh"
+    destination = "/home/${var.ssh_username}/sow_deploy.sh"
+  }
+
+  provisioner "file" {
     content     = templatefile("files/template/clusterctl.yaml.tmpl", { kubernetes_version = var.kubernetes_version, availability_zone = var.availability_zone, external = var.external, image = var.image, flavor = var.flavor, cloud_provider = var.cloud_provider })
     destination = "/home/${var.ssh_username}/clusterctl.yaml"
   }
@@ -112,6 +117,24 @@ EOF
   provisioner "file" {
     content     = templatefile("files/template/clusterctl_template.sh", { cloud_provider = var.cloud_provider })
     destination = "/home/${var.ssh_username}/clusterctl_template.sh"
+  }
+
+
+  provisioner "file" {
+    content     = templatefile("files/acre.yaml.tmpl", { image = var.image, backup_enabled = var.backup_enabled, letsencrypt_live = var.letsencrypt_live, letsencrypt_mail = var.letsencrypt_mail, cloud_provider = var.cloud_provider, clouds = local.clouds, secure = local.secure, public = var.public, dns_domain = var.dns_domain, availability_zone = var.availability_zone, flavor_worker = var.flavor_worker, flavor_worker_cpu = var.flavor_worker_cpu, flavor_worker_memory = var.flavor_worker_memory, flavor_worker_disk = var.flavor_worker_disk, pw = random_password.gardener_password.result })
+    destination = "/home/${var.ssh_username}/acre.yaml"
+  }
+
+
+  provisioner "file" {
+    source      = "files/bootstrap.sh"
+    destination = "/home/${var.ssh_username}/bootstrap.sh"
+  }
+
+
+  provisioner "file" {
+    source      = "files/kubernetes-manifests.d/"
+    destination = "/home/${var.ssh_username}"
   }
 
   provisioner "remote-exec" {

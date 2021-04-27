@@ -36,5 +36,45 @@ variable "ssh_username" {
 variable "kubernetes_version" {
   description = "desired kubernetes version for the workload cluster"
   type        = string
-  default     = "v1.18.12"
+  default     = "v1.20.6"
+}
+
+variable "backup_enabled" {
+  type    = string
+  default = "false"
+}
+
+variable "letsencrypt_live" {
+  default = false
+}
+
+variable "letsencrypt_mail" {
+  type = string
+}
+
+variable "dns_domain" {
+  type    = string
+  default = "23technologies.xyz."
+}
+
+variable "flavor_worker" {
+  type    = string
+  default = "8C-16GB-60GB"
+}
+
+variable "flavor_worker_cpu" {
+  default = "8"
+  type    = string
+}
+variable "flavor_worker_memory" {
+  default = "16Gi"
+  type    = string
+}
+variable "flavor_worker_disk" {
+  default = "60Gi"
+  type    = string
+}
+variable "public" {
+  default = "ext01"
+  type    = string
 }

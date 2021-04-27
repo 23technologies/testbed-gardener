@@ -12,6 +12,9 @@ VERSION_CLUSTERCTL="0.3.16"
 # install kubectl
 sudo snap install kubectl --classic
 
+# install git
+sudo apt-get install -y git
+
 # install k9s
 echo "# install k9s ${VERSION_CLUSTERCTL}"
 curl -L https://github.com/derailed/k9s/releases/download/v${VERSION_K9S}/k9s_Linux_x86_64.tar.gz | tar zf - -x k9s
@@ -44,3 +47,27 @@ EOF
 # eof
 bash install_kind.sh
 bash deploy.sh
+
+echo "Now we are going to use our new clusterctl deployed cluster..."
+# https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
+git clone https://github.com/kubernetes/autoscaler
+pushd autoscaler/vertical-pod-autoscaler || exit
+bash hack/vpa-up.sh
+popd || exit
+# install sow
+# https://github.com/gardener/garden-setup
+
+git clone https://github.com/gardener/sow
+echo "export PATH=$PATH:$HOME/sow/docker/bin" >> ~/.bashrc
+
+# apply openstack-cloud-controller
+kubectl apply -f ~/openstack.yaml
+
+# apply cinder-csi
+kubectl apply -f ~/cinder.yaml
+
+# create cloud.conf secret
+kubectl create secret generic cloud-config --from-file="$HOME"/cloud.conf -n kube-system
+
+bash sow_deploy.sh
+
