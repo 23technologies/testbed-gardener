@@ -50,8 +50,7 @@ spec:
     clusterConfiguration:
       apiServer:
         extraArgs:
-          cloud-config: /etc/kubernetes/cloud.conf
-          cloud-provider: openstack
+          cloud-provider: external
         extraVolumes:
         - hostPath: /etc/kubernetes/cloud.conf
           mountPath: /etc/kubernetes/cloud.conf
@@ -59,8 +58,7 @@ spec:
           readOnly: true
       controllerManager:
         extraArgs:
-          cloud-config: /etc/kubernetes/cloud.conf
-          cloud-provider: openstack
+          cloud-provider: external
         extraVolumes:
         - hostPath: /etc/kubernetes/cloud.conf
           mountPath: /etc/kubernetes/cloud.conf
@@ -85,14 +83,12 @@ spec:
     initConfiguration:
       nodeRegistration:
         kubeletExtraArgs:
-          cloud-config: /etc/kubernetes/cloud.conf
-          cloud-provider: openstack
+          cloud-provider: external
         name: '{{ local_hostname }}'
     joinConfiguration:
       nodeRegistration:
         kubeletExtraArgs:
-          cloud-config: /etc/kubernetes/cloud.conf
-          cloud-provider: openstack
+          cloud-provider: external
         name: '{{ local_hostname }}'
     postKubeadmCommands:
     - kubectl apply --kubeconfig /etc/kubernetes/admin.conf -f https://docs.projectcalico.org/manifests/calico.yaml
@@ -198,8 +194,7 @@ spec:
       joinConfiguration:
         nodeRegistration:
           kubeletExtraArgs:
-            cloud-config: /etc/kubernetes/cloud.conf
-            cloud-provider: openstack
+            cloud-provider: external
           name: '{{ local_hostname }}'
       preKubeadmCommands:
       - DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https curl
