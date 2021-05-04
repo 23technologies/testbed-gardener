@@ -120,7 +120,7 @@ EOF
   }
 
   provisioner "file" {
-    content     = templatefile("files/template/clusterctl_template.sh", { cloud_provider = var.cloud_provider })
+    content     = templatefile("files/template/clusterctl_template.sh", { CLOUD_PROVIDER = var.cloud_provider })
     destination = "/home/${var.ssh_username}/clusterctl_template.sh"
   }
 

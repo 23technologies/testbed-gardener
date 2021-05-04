@@ -13,7 +13,7 @@ CLOUD_CONF_ENC=$(base64 -w 0 clouds.conf)
 echo $CLOUD_CONF_ENC
 
 #Get CA and Encode CA
-AUTH_URL=$(yq eval .clouds.${cloud_provider}.auth.auth_url clouds.yaml)
+AUTH_URL=$(yq eval .clouds.${CLOUD_PROVIDER}.auth.auth_url clouds.yaml)
 AUTH_URL_SHORT=$(echo "$AUTH_URL" | sed s'/https:\/\///' | sed s'/\/.*$//')
 CERT_CERT=$(openssl s_client -connect "$AUTH_URL_SHORT" </dev/null 2>&1 | head -n 1 | sed s'/.*CN\ =\ //' | sed s'/\ /_/g' | sed s'/$/.pem/')
 CLOUD_CA_ENC=$(base64 -w 0 /etc/ssl/certs/"$CERT_CERT")
