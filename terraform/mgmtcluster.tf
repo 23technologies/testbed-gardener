@@ -106,6 +106,11 @@ EOF
 
   provisioner "file" {
     content     = templatefile("files/template/clouds.conf.tmpl", { cloud_provider = var.cloud_provider, clouds = local.clouds, secure = local.secure })
+    destination = "/home/${var.ssh_username}/cloud.conf"
+  }
+
+  provisioner "file" {
+    content     = templatefile("files/template/clouds.conf.tmpl", { cloud_provider = var.cloud_provider, clouds = local.clouds, secure = local.secure })
     destination = "/home/${var.ssh_username}/clouds.conf"
   }
 

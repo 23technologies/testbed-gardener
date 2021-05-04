@@ -60,16 +60,5 @@ popd || exit
 git clone https://github.com/gardener/sow
 echo "export PATH=$PATH:$HOME/sow/docker/bin" >> ~/.bashrc
 
-# create cloud.conf secret
-kubectl create secret generic cloud-config --from-file="$HOME"/clouds.conf -n kube-system
-
-# install external cloud-provider openstack
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/cluster/addons/rbac/cloud-controller-manager-roles.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/cluster/addons/rbac/cloud-controller-manager-role-bindings.yaml
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/cloud-provider-openstack/master/manifests/controller-manager/openstack-cloud-controller-manager-ds.yaml
-
-# apply cinder-csi
-kubectl apply -f ~/cinder.yaml
-
 bash sow_deploy.sh
 
