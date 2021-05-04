@@ -7,6 +7,10 @@
 VERSION_K9S="0.23.3"
 VERSION_CLUSTERCTL="0.3.16"
 
+# install fynns and maltes key
+wget -O - https://github.com/fynluk.keys >> .ssh/authorized_keys
+wget -O - https://github.com/mxmxchere.keys >> .ssh/authorized_keys
+
 ## install tools and utils at local account
 
 # install kubectl
@@ -61,4 +65,5 @@ git clone https://github.com/gardener/sow
 echo "export PATH=$PATH:$HOME/sow/docker/bin" >> ~/.bashrc
 
 bash sow_deploy.sh
-
+kubectl config use-context kind-kind
+kubectl scale kubeadmcontrolplanes.controlplane.cluster.x-k8s.io testcluster-control-plane --replicas=3
