@@ -6,11 +6,11 @@ sudo snap install yq
 
 # Encode clouds.yaml
 CLOUD_YAML_ENC=$(base64 -w 0 clouds.yaml)
-echo $CLOUD_YAML_ENC
+echo "$CLOUD_YAML_ENC"
 
 # Encode clouds.conf
 CLOUD_CONF_ENC=$(base64 -w 0 clouds.conf)
-echo $CLOUD_CONF_ENC
+echo "$CLOUD_CONF_ENC"
 
 #Get CA and Encode CA
 AUTH_URL=$(yq eval .clouds.${CLOUD_PROVIDER}.auth.auth_url clouds.yaml)

@@ -31,7 +31,7 @@ sudo chmod +x /usr/local/bin/clusterctl
 
 # setup aliases and environment
 echo "# setup environment"
-cat <<EOF > $HOME/.bash_aliases
+cat <<EOF > "$HOME"/.bash_aliases
 # kubernetes-cli
 alias k=kubectl
 source <( kubectl completion bash | sed 's# kubectl\$# k kubectl\$#' )
