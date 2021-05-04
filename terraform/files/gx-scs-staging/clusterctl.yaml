@@ -1,8 +1,8 @@
 # cluster-api template for provider openstack
 #
 # use-case: single Kubernetes controlplane and 1 worker node
-# 
-
+#
+---
 # Kubernetes version
 KUBERNETES_VERSION: v1.18.12
 
