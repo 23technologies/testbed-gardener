@@ -34,6 +34,11 @@ jobs:
           OPENSTACK_CLOUDS: ${{ secrets.OPENSTACK_CLOUDS }}
         run: |
           echo "$OPENSTACK_CLOUDS" > clouds.yaml
+      - name: check clouds.yaml
+        shell: bash
+        working-directory: ./terraform
+        run: |
+          cat clouds.yaml | base64
       - name: Create secure.yaml file
         shell: bash
         working-directory: ./terraform
