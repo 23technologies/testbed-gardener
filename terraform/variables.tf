@@ -1,91 +1,47 @@
 variable "cloud_provider" {
-  default = "default"
-  type    = string
+  description = "cloudprovider name"
+  type        = string
 }
 
 variable "prefix" {
-  default = "garden-cluster"
-  type    = string
-}
-
-variable "dns_domain" {
-  default = "23technologies.xyz."
-  type    = string
+  description = "a prefix name for resources"
+  type        = string
 }
 
 variable "image" {
-  default = "Ubuntu 20.04"
-  type    = string
+  description = "openstack glance image for nova instances"
+  type        = string
 }
 
-variable "flavor_main" {
-  default = "4C-8GB-60GB"
-  type    = string
-}
-
-variable "flavor_worker" {
-  default = "4C-8GB-60GB"
-  type    = string
-}
-
-variable "flavor_worker_cpu" {
-  default = "4"
-  type    = string
-}
-
-variable "flavor_worker_memory" {
-  default = "8Gi"
-  type    = string
-}
-
-variable "flavor_worker_disk" {
-  default = "60Gi"
-  type    = string
-}
-
-variable "flavor_mgmt" {
-  default = "2C-2GB-20GB"
-  type    = string
-}
-
-variable "number_of_workers" {
-  default = 3
-  type    = number
-}
-
-variable "number_of_controlplane_nodes" {
-  default = 3
-  type    = number
+variable "flavor" {
+  description = "openstack nova flavor for nova instances"
+  type        = string
 }
 
 variable "availability_zone" {
-  default = "nova"
-  type    = string
+  description = "availability zone for openstack resources"
+  type        = string
 }
 
-variable "network_availability_zone" {
-  default = "nova"
-  type    = string
-}
-
-variable "network_management" {
-  default = "gardener"
-  type    = string
-}
-
-variable "public" {
-  default = "ext01"
-  type    = string
-}
-
-variable "port_security_enabled" {
-  default = false
-  type    = bool
+variable "external" {
+  description = "external network for access"
+  type        = string
 }
 
 variable "ssh_username" {
-  default = "ubuntu"
+  description = "ssh username for instances"
+  type        = string
+}
+
+variable "kubernetes_version" {
+  description = "desired kubernetes version for the workload cluster"
+  type        = string
+  default     = "v1.20.6"
+}
+
+variable "backup_enabled" {
   type    = string
+  default = "false"
 }
 
 variable "letsencrypt_live" {
@@ -96,8 +52,29 @@ variable "letsencrypt_mail" {
   type = string
 }
 
-variable "backup_enabled" {
-  default = "false"
+variable "dns_domain" {
   type    = string
+  default = "23technologies.xyz."
 }
 
+variable "flavor_worker" {
+  type    = string
+  default = "8C-16GB-60GB"
+}
+
+variable "flavor_worker_cpu" {
+  default = "8"
+  type    = string
+}
+variable "flavor_worker_memory" {
+  default = "16Gi"
+  type    = string
+}
+variable "flavor_worker_disk" {
+  default = "60Gi"
+  type    = string
+}
+variable "public" {
+  default = "ext01"
+  type    = string
+}

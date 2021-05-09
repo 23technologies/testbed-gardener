@@ -13,7 +13,7 @@ You can watch a asciinema-demo [here](https://asciinema.org/a/390554).
 ``python3 -m pip install git+https://git.openstack.org/openstack/ospurge``
 
 ## Configuration
-All relevant steps happen in the folder terraform
+All relevant steps happen in the ./terraform folder
 
 Copy ``secure.yaml.sample`` to ``secure.yaml`` and ``clouds.yaml.sample`` to ``clouds.yaml``
 and fill in the correct credentials for your openstack-cloud.
@@ -26,10 +26,11 @@ Adjust variables in environment/standard.tfvars to suit your needs.
 
 ``make create`` creates the testbed:
 
-1. creates all relevant openstack resources, networks, securitygroups, dns-zones, VMs
-2. creates kubernetes cluster with RKE on the VMs
-3. deploys gardener, the gardener dashboard and a gardener-seed in the cluster
-4. Installs keycloak and attaches it to gardener-dashboard
+1. creates management VM on the openstack (including networks, secgroups, ...)
+2. creates bootstrap cluster via kind
+3. creates production-cluster via cluster-api
+4. deploys the external openstack-cloud-controller-manager
+5. deploys gardener (including dashboard and seed)
 
 At the end of a successful deployment, the URL, email and password for the login will be displayed.
 

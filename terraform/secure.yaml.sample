@@ -1,5 +1,6 @@
 ---
 clouds:
-  standard:
+  example:
     auth:
-      password: PASSWORD
+      username:
+      password:
