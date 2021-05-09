@@ -51,7 +51,7 @@ jobs:
         working-directory: ./terraform
       - name: Delete capi-keypair
         run: |
-          openstack keypair delete capi-keypair --os-cloud gx-bc || true
+          OS_CLOUD=gx-bc openstack keypair delete capi-keypair || true
       - name: Purge Betacloud project a second time
         run: |
           ospurge --purge-own-project --os-cloud gx-bc --verbose || true
