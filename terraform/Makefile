@@ -1,10 +1,10 @@
 # Makefile
 
 # set the env we used 
-#ENVIRONMENT = gx-betacloud
+ENVIRONMENT = gx-bc
 #ENVIRONMENT = gx-citycloud
 #ENVIRONMENT = gx-scs
-ENVIRONMENT = gx-scs-staging
+#ENVIRONMENT = gx-scs-staging
 OPENSTACK = openstack
 USERNAME = ubuntu
 CONSOLE = capi-mgmtcluster
