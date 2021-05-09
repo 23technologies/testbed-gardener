@@ -34,11 +34,6 @@ jobs:
           OPENSTACK_CLOUDS: ${{ secrets.OPENSTACK_CLOUDS }}
         run: |
           echo "$OPENSTACK_CLOUDS" > clouds.yaml
-      - name: check clouds.yaml
-        shell: bash
-        working-directory: ./terraform
-        run: |
-          cat clouds.yaml | base64
       - name: Create secure.yaml file
         shell: bash
         working-directory: ./terraform
@@ -56,7 +51,11 @@ jobs:
         working-directory: ./terraform
       - name: Delete capi-keypair
         run: |
-          openstack keypair delete capi-keypair || true
+          openstack keypair delete capi-keypair --os-cloud gx-bc || true
+      - name: Purge Betacloud project a second time
+        run: |
+          ospurge --purge-own-project --os-cloud gx-bc --verbose || true
+        working-directory: ./terraform
       - name: Deploy environment
         run: make ENVIRONMENT=gx-bc create
         working-directory: ./terraform
