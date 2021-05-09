@@ -1,0 +1,53 @@
+---
+name: Daily betacloud
+
+on:  # yamllint disable-line rule:truthy
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/daily-testbed-deployment.yml'
+    branches:
+      - feat/daily-testbed-deployment
+  schedule:
+    - cron: '0 1 * * *'
+
+jobs:
+  daily-betacloud-deployment:
+    if: github.repository == '23technologies/testbed-gardener'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.14.2
+      - name: Setup python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Create clouds.yaml file
+        shell: bash
+        working-directory: ./terraform
+        env:
+          OPENSTACK_CLOUDS: ${{ secrets.OPENSTACK_CLOUDS }}
+        run: |
+          echo "$OPENSTACK_CLOUDS" > clouds.yaml
+      - name: Create secure.yaml file
+        shell: bash
+        working-directory: ./terraform
+        env:
+          OPENSTACK_SECURE: ${{ secrets.OPENSTACK_SECURE }}
+        run: |
+          echo "$OPENSTACK_SECURE" > secure.yaml
+      - name: Install ospurge
+        run: pip3 install git+https://git.openstack.org/openstack/ospurge
+      - name: Install openstack client
+        run: pip3 install python-openstackclient
+      - name: Remove existing environment
+        run: yes | make ENVIRONMENT=gx-bc purge || exit 0
+        working-directory: ./terraform
+      - name: Deploy environment
+        run: make ENVIRONMENT=gx-bc create
+        working-directory: ./terraform
