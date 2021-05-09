@@ -45,10 +45,13 @@ jobs:
         run: pip3 install git+https://git.openstack.org/openstack/ospurge
       - name: Install openstack client
         run: pip3 install python-openstackclient
-      - name: Remove existing environment
+      - name: Purge Betacloud project
         run: |
-          yes | make ENVIRONMENT=gx-bc purge || exit 0
+          ospurge --purge-own-project --os-cloud gx-bc --verbose || true
         working-directory: ./terraform
+      - name: Delete capi-keypair
+        run: |
+          openstack keypair delete capi-keypair || true
       - name: Deploy environment
         run: make ENVIRONMENT=gx-bc create
         working-directory: ./terraform
