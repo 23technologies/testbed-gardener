@@ -46,7 +46,8 @@ jobs:
       - name: Install openstack client
         run: pip3 install python-openstackclient
       - name: Remove existing environment
-        run: yes | make ENVIRONMENT=gx-bc purge || exit 0
+        run: |
+          yes | make ENVIRONMENT=gx-bc purge || exit 0
         working-directory: ./terraform
       - name: Deploy environment
         run: make ENVIRONMENT=gx-bc create
