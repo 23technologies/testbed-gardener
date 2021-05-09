@@ -47,16 +47,16 @@ jobs:
         run: pip3 install python-openstackclient
       - name: Purge Betacloud project
         run: |
-          ospurge --purge-own-project --os-cloud gx-bc --verbose || true
+          ospurge --purge-own-project --os-cloud gx-scs-staging --verbose || true
         working-directory: ./terraform
       - name: Delete capi-keypair
         run: |
-          OS_CLOUD=gx-bc openstack keypair delete capi-keypair || true
+          OS_CLOUD=gx-scs-staging openstack keypair delete capi-keypair || true
         working-directory: ./terraform
       - name: Purge Betacloud project a second time
         run: |
-          ospurge --purge-own-project --os-cloud gx-bc --verbose || true
+          ospurge --purge-own-project --os-cloud gx-scs-staging --verbose || true
         working-directory: ./terraform
       - name: Deploy environment
-        run: make ENVIRONMENT=gx-bc create
+        run: make ENVIRONMENT=gx-scs-staging create
         working-directory: ./terraform
