@@ -54,16 +54,6 @@ bash deploy.sh
 
 echo "Now we are going to use our new clusterctl deployed cluster..."
 # https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
-git clone https://github.com/kubernetes/autoscaler
-pushd autoscaler/vertical-pod-autoscaler || exit
-bash hack/vpa-up.sh
-popd || exit
-# install sow
-# https://github.com/gardener/garden-setup
-
-git clone https://github.com/gardener/sow
-echo "export PATH=$PATH:$HOME/sow/docker/bin" >> ~/.bashrc
-
 bash sow_deploy.sh
 kubectl config use-context kind-kind
 kubectl scale kubeadmcontrolplanes.controlplane.cluster.x-k8s.io testcluster-control-plane --replicas=3
