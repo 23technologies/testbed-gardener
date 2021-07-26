@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION_GARDENER=3.9.0
+VERSION_GARDENER=3.12.0
 
 git clone https://github.com/kubernetes/autoscaler
 pushd autoscaler/vertical-pod-autoscaler || exit

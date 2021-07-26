@@ -1,9 +1,19 @@
 # a working set for gx-scs
-#
 prefix            = "capi"
 cloud_provider    = "gx-scs"
 availability_zone = "nova"
 external          = "ext01"
-flavor            = "2C-4GB-20GB"
-image             = "Ubuntu 20.04"
+flavor            = "8C-16GB-60GB"
 ssh_username      = "ubuntu"
+dns_domain                = "prod.gardener-test.site"
+flavor_worker             = "8C-16GB-60GB"
+flavor_worker_cpu         = "8"
+flavor_worker_memory      = "16Gi"
+flavor_worker_disk        = "60Gi"
+image                     = "Ubuntu 20.04"
+network_availability_zone = "nova"
+network_management        = "gardener"
+public                    = "ext01"
+letsencrypt_mail          = "muench@23technologies.cloud"
+letsencrypt_live	  = true
+backup_enabled            = "true"
