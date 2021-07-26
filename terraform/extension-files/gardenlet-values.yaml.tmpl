@@ -1,0 +1,124 @@
+global:
+  gardenlet:
+    enabled: true
+    replicaCount: 1
+    revisionHistoryLimit: 10
+    serviceAccountName: gardenlet
+    image:
+      repository: eu.gcr.io/gardener-project/gardener/gardenlet
+      tag: v1.23.0
+      pullPolicy: IfNotPresent
+    resources:
+      requests:
+        cpu: 100m
+        memory: 100Mi
+      limits:
+        cpu: 2000m
+        memory: 512Mi
+    additionalVolumes: []
+    additionalVolumeMounts: []
+    env: []
+    vpa: false
+    config:
+      gardenClientConnection:
+        qps: 100
+        burst: 130
+        bootstrapKubeconfig:
+          name: gardenlet-kubeconfig-bootstrap
+          namespace: garden
+          kubeconfig: |
+            apiVersion: v1
+            kind: Config
+            current-context: gardenlet-bootstrap@default
+            clusters:
+              - cluster:
+                  certificate-authority-data: ${gardener_apiserver_ca}
+                  server: ${gardener_apiserver_server}
+                name: default
+            contexts:
+              - context:
+                  cluster: default
+                  user: gardenlet-bootstrap
+                name: gardenlet-bootstrap@default
+            users:
+              - name: gardenlet-bootstrap
+                user:
+                  token: ${bootstrap_token_id}.${bootstrap_token_secret}
+        kubeconfigSecret:
+          name: gardenlet-kubeconfig
+          namespace: garden
+      seedClientConnection:
+        qps: 100
+        burst: 130
+      shootClientConnection:
+        qps: 25
+        burst: 50
+      controllers:
+        backupBucket:
+          concurrentSyncs: 20
+        backupEntry:
+          concurrentSyncs: 20
+          deletionGracePeriodHours: 0
+        seed:
+          concurrentSyncs: 5
+          syncPeriod: 1m
+        shoot:
+          concurrentSyncs: 20
+          syncPeriod: 1h
+          retryDuration: 12h
+          respectSyncPeriodOverwrite: false
+          reconcileInMaintenanceOnly: false
+        shootCare:
+          concurrentSyncs: 5
+          syncPeriod: 30s
+          staleExtensionHealthChecks:
+            enabled: true
+          conditionThresholds:
+            - type: APIServerAvailable
+              duration: 1m
+            - type: ControlPlaneHealthy
+              duration: 1m
+            - type: SystemComponentsHealthy
+              duration: 1m
+            - type: EveryNodeReady
+              duration: 5m
+        shootStateSync:
+          concurrentSyncs: 5
+          syncPeriod: 30s
+        shootedSeedRegistration:
+          syncJitterPeriod: 5m
+      resources:
+        capacity:
+          shoots: 250
+      leaderElection:
+        leaderElect: true
+        leaseDuration: 15s
+        renewDeadline: 10s
+        retryPeriod: 2s
+        resourceLock: configmaps
+      logLevel: info
+      kubernetesLogLevel: 0
+      server:
+        https:
+          bindAddress: 0.0.0.0
+          port: 2720
+      featureGates: {}
+      seedConfig:
+        metadata:
+          name: ${cloud_provider}
+        spec:
+          dns:
+            ingressDomain: ing.${dns_domain}
+          networks: # Check the CIDR range
+            nodes: 10.240.0.0/16
+            pods: 100.244.0.0/16
+            services: 100.32.0.0/13
+            shootDefaults:
+              pods: 100.96.0.0/11
+              services: 100.64.0.0/13
+          provider:
+            region: ${clouds.region_name}
+            type: openstack
+  deployment:
+    virtualGarden:
+      enabled: false

@@ -1,6 +1,6 @@
 ---
 clouds:
-  example:
+  default:
     interface: "public"
     identity_api_version: 3
     image_api_version: 2
@@ -8,5 +8,6 @@ clouds:
       auth_url:
       project_name:
       user_domain_name:
+      # not required if you dont use make purge, can usually be set to the same value as user_domain_name
       project_domain_name:
     region_name:

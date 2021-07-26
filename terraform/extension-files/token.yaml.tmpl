@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: bootstrap-token-b17533 # last digits must be equal to token-id
+  namespace: kube-system
+type: bootstrap.kubernetes.io/token
+stringData:
+  token-id: "b17533" # must be 6 characters
+  token-secret: "e1f3b2cf9664c2f4" # 16 characters
+  usage-bootstrap-authentication: "true"
+  usage-bootstrap-signing: "true"
