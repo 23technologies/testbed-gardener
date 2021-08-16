@@ -1,7 +1,7 @@
 # Makefile
 
 # set the env we used 
-ENVIRONMENT = default
+ENVIRONMENT = gx-scs
 #ENVIRONMENT = gx-citycloud
 #ENVIRONMENT = gx-scs
 #ENVIRONMENT = gx-citycloud
